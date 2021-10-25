@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  config,
-  useClient,
-  useMicrophoneAndCameraTracks,
-  channelName,
-} from "./settings.js";
+import { config, useClient, useMicrophoneAndCameraTracks } from "./settings.js";
 import { Grid } from "@material-ui/core";
 import Video from "./Video";
 import Controls from "./Controls";
@@ -15,6 +10,7 @@ export default function VideoCall(props) {
   const [start, setStart] = useState(false);
   const client = useClient();
   const { ready, tracks } = useMicrophoneAndCameraTracks();
+  const channelName = "test-video";
 
   useEffect(() => {
     let init = async (name) => {
@@ -64,7 +60,7 @@ export default function VideoCall(props) {
         console.log(error);
       }
     }
-  }, [channelName, client, ready, tracks]);
+  }, [client, ready, tracks]);
 
   return (
     <Grid container direction="column" style={{ height: "100%" }}>
