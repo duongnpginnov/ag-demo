@@ -12,7 +12,7 @@ function App() {
         <VideoCall setInCall={setInCall} uuid={uuid} setUuid={setUuid} />
       ) : (
         <>
-          <p>input your ID for testing</p>
+          <h2>Input ID for testing</h2>
           <input
             type="text"
             placeholder="Enter your ID"
@@ -24,6 +24,7 @@ function App() {
             color="primary"
             onClick={() => setInCall(true)}
             disabled={!uuid}
+            className="join-btn"
           >
             Join Call
           </Button>

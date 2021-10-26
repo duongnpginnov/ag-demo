@@ -108,7 +108,11 @@ export default function VideoCall(props) {
 
   return (
     <>
-      <Grid container direction="column" style={{ height: "100%" }}>
+      <Grid
+        container
+        direction="column"
+        style={{ height: "100%", width: "99%" }}
+      >
         <Grid item style={{ height: "5%" }}>
           {ready && tracks && (
             <Controls

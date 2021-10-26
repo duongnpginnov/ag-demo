@@ -14,5 +14,13 @@ code {
 }
 
 #root {
-  height: 100vh;
+  height: inherit;
+}
+
+.App {
+  text-align: center;
+}
+.App .join-btn {
+  display: block;
+  margin: 20px auto;
 }
