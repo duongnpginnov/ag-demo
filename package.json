@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "agora-rtc-react": "git://github.com/AgoraIO-Community/agora-rtc-react.git#v1.0.1",
+    "antd": "^4.16.13",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3"

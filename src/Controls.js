@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useClient, useShareScreen } from "./settings";
 import { Grid, Button } from "@material-ui/core";
 import MicIcon from "@material-ui/icons/Mic";
@@ -9,12 +9,28 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ScreenShareIcon from "@material-ui/icons/ScreenShare";
 
 import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
+import { Modal } from "antd";
 
 export default function Controls(props) {
   const client = useClient();
-  const { tracks, setStart, setInCall } = props;
+  const { tracks, setStart, setInCall, muteOther, uuid, users } = props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
   const [shareScreen, setShareScreen] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    console.log("muteOther ", muteOther);
+    const alo = async () => {
+      // if (uuid == 22) {
+      await tracks[0].setEnabled(muteOther ? false : true);
+      setTrackState((ps) => {
+        return { ...ps, audio: muteOther ? false : true };
+      });
+      // }
+    };
+
+    alo();
+  }, [muteOther]);
 
   const mute = async (type) => {
     if (type === "audio") {
@@ -38,8 +54,20 @@ export default function Controls(props) {
     }).then((localScreenTrack) => {
       /** ... **/
       console.log("localScreenTrack ", localScreenTrack);
-      client.publish(localScreenTrack);
+      // client.publish(localScreenTrack);
     });
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   const leaveChannel = async () => {
@@ -51,45 +79,78 @@ export default function Controls(props) {
     setInCall(false);
   };
 
+  console.log("list users ", users);
+
   return (
-    <Grid container spacing={2} alignItems="center">
-      <Grid item>
-        <Button
-          variant="contained"
-          color={trackState.audio ? "primary" : "secondary"}
-          onClick={() => mute("audio")}
-        >
-          {trackState.audio ? <MicIcon /> : <MicOffIcon />}
-        </Button>
+    <>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <Button
+            variant="contained"
+            color={trackState.audio ? "primary" : "secondary"}
+            onClick={() => mute("audio")}
+          >
+            {trackState.audio ? <MicIcon /> : <MicOffIcon />}
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color={trackState.video ? "primary" : "secondary"}
+            onClick={() => mute("video")}
+          >
+            {trackState.video ? <VideocamIcon /> : <VideocamOffIcon />}
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleShareScreen}
+          >
+            <ScreenShareIcon />
+          </Button>
+        </Grid>
+        {uuid == 11 ? (
+          <Grid item>
+            <Button variant="contained" color="primary" onClick={showModal}>
+              survey
+            </Button>
+          </Grid>
+        ) : null}
+        <Grid item>
+          <Button
+            variant="contained"
+            color="default"
+            onClick={() => leaveChannel()}
+          >
+            Leave
+            <ExitToAppIcon />
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item>
-        <Button
-          variant="contained"
-          color={trackState.video ? "primary" : "secondary"}
-          onClick={() => mute("video")}
-        >
-          {trackState.video ? <VideocamIcon /> : <VideocamOffIcon />}
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          variant="contained"
-          color={trackState.video ? "primary" : "secondary"}
-          onClick={handleShareScreen}
-        >
-          <ScreenShareIcon />
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          variant="contained"
-          color="default"
-          onClick={() => leaveChannel()}
-        >
-          Leave
-          <ExitToAppIcon />
-        </Button>
-      </Grid>
-    </Grid>
+      <Modal
+        title="Add Survey"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button
+            variant="outlined"
+            onClick={handleCancel}
+            style={{ marginRight: "10px" }}
+          >
+            Cancel
+          </Button>,
+          <Button variant="contained" color="primary" onClick={handleOk}>
+            Start
+          </Button>,
+        ]}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+    </>
   );
 }
