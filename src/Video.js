@@ -62,6 +62,7 @@ export default function Video(props) {
                   <Button
                     variant="contained"
                     color={user.audioTrack ? "primary" : "secondary"}
+                    disabled={uuid != "host"}
                     onClick={() =>
                       hostToggleMicOfPaticipant(
                         user.uid,
@@ -77,6 +78,7 @@ export default function Video(props) {
                     variant="contained"
                     color={user.videoTrack ? "primary" : "secondary"}
                     // onClick={() => mute("video")}
+                    disabled={uuid != "host"}
                   >
                     {user.videoTrack ? <VideocamIcon /> : <VideocamOffIcon />}
                   </Button>
@@ -108,6 +110,7 @@ export default function Video(props) {
                       variant="contained"
                       color={user.audioTrack ? "primary" : "secondary"}
                       // onClick={() => mute("video")}
+                      disabled={uuid != "host"}
                     >
                       {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
                     </Button>
@@ -117,6 +120,7 @@ export default function Video(props) {
                       variant="contained"
                       color={user.videoTrack ? "primary" : "secondary"}
                       // onClick={() => mute("video")}
+                      disabled={uuid != "host"}
                     >
                       {user.videoTrack ? <VideocamIcon /> : <VideocamOffIcon />}
                     </Button>

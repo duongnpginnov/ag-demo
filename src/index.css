@@ -24,3 +24,9 @@ code {
   display: block;
   margin: 20px auto;
 }
+
+.MuiButton-contained.Mui-disabled {
+  color: rgb(255 255 255) !important;
+  box-shadow: none;
+  background-color: rgb(31 9 9 / 51%) !important;
+}
