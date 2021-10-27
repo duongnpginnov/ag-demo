@@ -79,6 +79,10 @@ export default function Controls(props) {
     setInCall(false);
   };
 
+  const turnOnMic = () => {};
+
+  const turnOffMic = () => {};
+
   console.log("list users ", users);
 
   return (
@@ -111,12 +115,25 @@ export default function Controls(props) {
             <ScreenShareIcon />
           </Button>
         </Grid>
-        {uuid == 11 ? (
-          <Grid item>
-            <Button variant="contained" color="primary" onClick={showModal}>
-              survey
-            </Button>
-          </Grid>
+        {uuid == "host" ? (
+          <>
+            <Grid item>
+              <Button variant="contained" color="primary" onClick={turnOnMic}>
+                Mute All
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" color="primary" onClick={turnOffMic}>
+                Unmute All
+              </Button>
+            </Grid>
+
+            <Grid item>
+              <Button variant="contained" color="primary" onClick={showModal}>
+                survey
+              </Button>
+            </Grid>
+          </>
         ) : null}
         <Grid item>
           <Button

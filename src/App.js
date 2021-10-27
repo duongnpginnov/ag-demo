@@ -12,10 +12,10 @@ function App() {
         <VideoCall setInCall={setInCall} uuid={uuid} setUuid={setUuid} />
       ) : (
         <>
-          <h2>Input ID for testing</h2>
+          <h2>Input your name</h2>
           <input
             type="text"
-            placeholder="Enter your ID"
+            placeholder="Enter your name"
             value={uuid}
             onChange={(e) => setUuid(e.target.value)}
           />

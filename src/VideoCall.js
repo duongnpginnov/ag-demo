@@ -18,69 +18,60 @@ export default function VideoCall(props) {
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const [muteOther, setMuteOther] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [listUid, setListUid] = useState([]);
+  const [count, setCount] = useState(1);
 
   useEffect(() => {
     let init = async (name) => {
       client.on("user-published", async (user, mediaType) => {
         await client.subscribe(user, mediaType);
-        console.log("user-published ", user);
-
-        if (mediaType === "video") {
-          console.log("listUid listUid publish ", listUid);
-          setListUid((prevListUid) => {
-            return !prevListUid.includes(user.uid)
-              ? [...prevListUid, user.uid]
-              : [...prevListUid];
-          });
-          setUsers((prevUsers) => {
-            return [...prevUsers, user];
-          });
-        }
+        console.log("test - user-published ", user);
         if (mediaType === "audio") {
           user.audioTrack.play();
         }
+
+        setCount((prevCount) => {
+          return prevCount + 1;
+        });
       });
 
       client.on("user-unpublished", (user, mediaType) => {
-        console.log("user-unpublished ", user);
+        console.log("test - user-unpublished ", user);
         if (mediaType === "audio") {
           if (user.audioTrack) user.audioTrack.stop();
         }
-        if (mediaType === "video") {
-          setUsers((prevUsers) => {
-            return prevUsers.filter((User) => User.uid !== user.uid);
-          });
-        }
+        setCount((prevCount) => {
+          return prevCount + 1;
+        });
       });
 
       client.on("user-left", (user) => {
-        console.log(" left room ", user);
-        setListUid((prevListUid) => {
-          return prevListUid.filter((uid) => uid !== user.uid);
-        });
+        console.log("test -  left room ", user);
         setUsers((prevUsers) => {
           return prevUsers.filter((User) => User.uid !== user.uid);
         });
       });
+      client.on("user-joined", (user) => {
+        console.log("test - user-joined", user);
+        setUsers((prevUsers) => {
+          return [...prevUsers, user];
+        });
+      });
+
       client.on("user-info-updated", (uid, msg) => {
-        if (uid == 11) {
+        if (uid == "host") {
           if (msg == "unmute-audio") {
             setMuteOther(false);
           } else if (msg == "mute-audio") {
-            console.log("mute other start");
+            console.log("test - mute other start");
             setMuteOther(true);
-          } else if (msg == "mute-video") {
-            setIsModalVisible(true);
           }
         }
       });
 
       try {
         let alo = await client.join(config.appId, name, config.token, uuid);
-        console.log("join ", alo);
       } catch (error) {
-        console.log("error");
+        console.log("test - error");
       }
 
       if (tracks) await client.publish([tracks[0], tracks[1]]);
@@ -104,8 +95,6 @@ export default function VideoCall(props) {
     setIsModalVisible(false);
   };
 
-  console.log("listUid ", listUid);
-
   return (
     <>
       <Grid
@@ -122,12 +111,19 @@ export default function VideoCall(props) {
               muteOther={muteOther}
               uuid={uuid}
               users={users}
+              count={count}
             />
           )}
         </Grid>
         <Grid item style={{ height: "95%" }}>
           {start && tracks && (
-            <Video tracks={tracks} users={users} muteOther={muteOther} />
+            <Video
+              tracks={tracks}
+              users={users}
+              muteOther={muteOther}
+              count={count}
+              uuid={uuid}
+            />
           )}
         </Grid>
       </Grid>
