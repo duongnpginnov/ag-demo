@@ -13,7 +13,8 @@ import { Modal } from "antd";
 
 export default function Controls(props) {
   const client = useClient();
-  const { tracks, setStart, setInCall, muteOther, uuid, users } = props;
+  const { tracks, setStart, setInCall, muteOther, uuid, users, userAction } =
+    props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
   const [shareScreen, setShareScreen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,6 +32,24 @@ export default function Controls(props) {
 
     alo();
   }, [muteOther]);
+
+  useEffect(() => {
+    console.log("test - userAction control ", userAction);
+    const alo = async (status) => {
+      // if (uuid == 22) {
+      await tracks[0].setEnabled(status);
+      setTrackState((ps) => {
+        return { ...ps, audio: status };
+      });
+      // }
+    };
+    if (userAction.hasOwnProperty("timestamp")) {
+      if (userAction.uid == uuid) {
+        console.log("test - userAction control toggle");
+        alo(userAction.status);
+      }
+    }
+  }, [userAction]);
 
   const mute = async (type) => {
     if (type === "audio") {

@@ -9,6 +9,15 @@ import { Grid } from "@material-ui/core";
 import Video from "./Video";
 import Controls from "./Controls";
 import Survey from "./Survey";
+// import TestFireBase from "./TestFireBase";
+import db from "./configFireBase";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  onSnapshot,
+} from "firebase/firestore";
 
 export default function VideoCall(props) {
   const { setInCall, uuid } = props;
@@ -19,6 +28,7 @@ export default function VideoCall(props) {
   const [muteOther, setMuteOther] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [count, setCount] = useState(1);
+  const [userAction, setUserAction] = useState({});
 
   useEffect(() => {
     let init = async (name) => {
@@ -57,16 +67,16 @@ export default function VideoCall(props) {
         });
       });
 
-      client.on("user-info-updated", (uid, msg) => {
-        if (uid == "host") {
-          if (msg == "unmute-audio") {
-            setMuteOther(false);
-          } else if (msg == "mute-audio") {
-            console.log("test - mute other start");
-            setMuteOther(true);
-          }
-        }
-      });
+      // client.on("user-info-updated", (uid, msg) => {
+      //   if (uid == "host") {
+      //     if (msg == "unmute-audio") {
+      //       setMuteOther(false);
+      //     } else if (msg == "mute-audio") {
+      //       console.log("test - mute other start");
+      //       setMuteOther(true);
+      //     }
+      //   }
+      // });
 
       try {
         let alo = await client.join(config.appId, name, config.token, uuid);
@@ -87,12 +97,48 @@ export default function VideoCall(props) {
     }
   }, [channelName, client, ready, tracks]);
 
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "users"),
+      (snapshot) => {
+        console.log("test - start listen ", snapshot);
+        const userListListen = snapshot.docs.map((doc) => doc.data());
+        console.log("test - start userListListen ", userListListen);
+        let tmpList = userListListen.length ? userListListen.sort(compare) : [];
+        console.log("test - start tmpList after sort ", tmpList);
+        let userAc = tmpList.pop();
+        console.log("test - start userAc ", userAc);
+        setUserAction(userAc);
+      },
+      (error) => {
+        console.log("test - start listen error ", error);
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const compare = (a, b) => {
+    if (a.timestamp < b.timestamp) {
+      return -1;
+    }
+    if (a.timestamp > b.timestamp) {
+      return 1;
+    }
+    return 0;
+  };
+
   const handleOk = () => {
     setIsModalVisible(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const updateFirebaseState = (data) => {
+    console.log("test - updateFirebaseState ", data);
   };
 
   return (
@@ -112,6 +158,7 @@ export default function VideoCall(props) {
               uuid={uuid}
               users={users}
               count={count}
+              userAction={userAction}
             />
           )}
         </Grid>

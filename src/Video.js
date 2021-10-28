@@ -5,6 +5,14 @@ import MicIcon from "@material-ui/icons/Mic";
 import MicOffIcon from "@material-ui/icons/MicOff";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import db from "./configFireBase";
 
 export default function Video(props) {
   const { users, tracks, uuid } = props;
@@ -15,11 +23,17 @@ export default function Video(props) {
   }, [users, tracks]);
   console.log("test - users video component", users);
 
-  const hostToggleMicOfPaticipant = (uid, status) => {
+  const hostToggleMicOfPaticipant = async (uid, status) => {
     console.log("test - hostToggleMicOfPaticipant uid ", uid);
     console.log("test - hostToggleMicOfPaticipant status ", status);
     if (uuid == "host") {
-      alert(`togle mic of ${uid}`);
+      const docRef = await addDoc(collection(db, "users"), {
+        name: "test 8",
+        uid: uid,
+        status: status ? false : true,
+        type: "one",
+        timestamp: new Date().getTime(),
+      });
     } else return void 0;
   };
   return (
