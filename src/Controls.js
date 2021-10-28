@@ -10,6 +10,14 @@ import ScreenShareIcon from "@material-ui/icons/ScreenShare";
 
 import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
 import { Modal } from "antd";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import db from "./configFireBase";
 
 export default function Controls(props) {
   const client = useClient();
@@ -18,6 +26,7 @@ export default function Controls(props) {
   const [trackState, setTrackState] = useState({ video: true, audio: true });
   const [shareScreen, setShareScreen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalStudent, setIsModalStudent] = useState(false);
 
   useEffect(() => {
     console.log("muteOther ", muteOther);
@@ -43,10 +52,20 @@ export default function Controls(props) {
       });
       // }
     };
-    if (userAction.hasOwnProperty("timestamp")) {
-      if (userAction.uid == uuid) {
-        console.log("test - userAction control toggle");
-        alo(userAction.status);
+    if (userAction && userAction.hasOwnProperty("timestamp")) {
+      if (userAction.type == "muteAll") {
+        if (uuid != "host") {
+          alo(true);
+        }
+      } else if (userAction.type == "unMuteAll") {
+        if (uuid != "host") {
+          alo(false);
+        }
+      } else {
+        if (userAction.uid == uuid) {
+          console.log("test - userAction control toggle");
+          alo(userAction.status);
+        }
       }
     }
   }, [userAction]);
@@ -81,12 +100,31 @@ export default function Controls(props) {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
+    const docRef = await addDoc(collection(db, "users"), {
+      name: "test 8",
+      uid: 9999999999,
+      status: true,
+      type: "survey",
+      timestamp: new Date().getTime(),
+    });
     setIsModalVisible(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const showModalResult = () => {
+    setIsModalStudent(true);
+  };
+
+  const handleStudentOk = async () => {
+    setIsModalStudent(false);
+  };
+
+  const handleStudentCancel = () => {
+    setIsModalStudent(false);
   };
 
   const leaveChannel = async () => {
@@ -98,9 +136,25 @@ export default function Controls(props) {
     setInCall(false);
   };
 
-  const turnOnMic = () => {};
+  const turnOnMic = async () => {
+    const docRef = await addDoc(collection(db, "users"), {
+      name: "test 8",
+      uid: 9999999999,
+      status: true,
+      type: "unMuteAll",
+      timestamp: new Date().getTime(),
+    });
+  };
 
-  const turnOffMic = () => {};
+  const turnOffMic = async () => {
+    const docRef = await addDoc(collection(db, "users"), {
+      name: "test 8",
+      uid: 9999999999,
+      status: true,
+      type: "muteAll",
+      timestamp: new Date().getTime(),
+    });
+  };
 
   console.log("list users ", users);
 
@@ -153,7 +207,17 @@ export default function Controls(props) {
               </Button>
             </Grid>
           </>
-        ) : null}
+        ) : (
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={showModalResult}
+            >
+              Result
+            </Button>
+          </Grid>
+        )}
         <Grid item>
           <Button
             variant="contained"
@@ -186,6 +250,19 @@ export default function Controls(props) {
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>
+      </Modal>
+      <Modal
+        title="Your result"
+        visible={isModalStudent}
+        onOk={handleStudentOk}
+        onCancel={handleStudentCancel}
+        footer={[
+          <Button variant="contained" color="primary" onClick={handleStudentOk}>
+            OK
+          </Button>,
+        ]}
+      >
+        <p>Some result...</p>
       </Modal>
     </>
   );

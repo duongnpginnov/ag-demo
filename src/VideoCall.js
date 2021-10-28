@@ -108,6 +108,9 @@ export default function VideoCall(props) {
         console.log("test - start tmpList after sort ", tmpList);
         let userAc = tmpList.pop();
         console.log("test - start userAc ", userAc);
+        if (userAc && userAc.type == "survey" && uuid != "host") {
+          setIsModalVisible(true);
+        }
         setUserAction(userAc);
       },
       (error) => {
