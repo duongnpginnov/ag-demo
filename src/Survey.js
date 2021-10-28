@@ -4,11 +4,11 @@ import { Modal, Radio, Input, Space } from "antd";
 
 export default function Survey(props) {
   const { isModalVisible, handleOk, handleCancel } = props;
-  const [timwShowSurvey, setTimeShowSurvey] = useState(5);
+  const [timwShowSurvey, setTimeShowSurvey] = useState(10);
   const [selectValue, setSelectValue] = useState(1);
 
   useEffect(() => {
-    let timeToEnd = 5;
+    let timeToEnd = 10;
     let timeShowInterview = setInterval(() => {
       timeToEnd -= 1;
       setTimeShowSurvey(timeToEnd);
@@ -17,7 +17,7 @@ export default function Survey(props) {
       console.log("close modal");
       clearInterval(timeShowInterview);
       handleOk();
-    }, 4800);
+    }, 9800);
     return () => {
       clearTimeout(timeshowTimeout);
       clearInterval(timeShowInterview);

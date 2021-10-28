@@ -207,17 +207,12 @@ export default function Controls(props) {
               </Button>
             </Grid>
           </>
-        ) : (
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={showModalResult}
-            >
-              Result
-            </Button>
-          </Grid>
-        )}
+        ) : null}
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={showModalResult}>
+            Result
+          </Button>
+        </Grid>
         <Grid item>
           <Button
             variant="contained"
