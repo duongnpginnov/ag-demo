@@ -125,6 +125,12 @@ export default function Video(props) {
                       color={user.audioTrack ? "primary" : "secondary"}
                       // onClick={() => mute("video")}
                       disabled={uuid != "host"}
+                      onClick={() =>
+                        hostToggleMicOfPaticipant(
+                          user.uid,
+                          user.audioTrack ? true : false
+                        )
+                      }
                     >
                       {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
                     </Button>
