@@ -7,6 +7,7 @@ import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ScreenShareIcon from "@material-ui/icons/ScreenShare";
+import { config, channelName } from "./settings.js";
 
 import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
 import { Modal } from "antd";
@@ -100,6 +101,24 @@ export default function Controls(props) {
 
   const handleShareScreen = async () => {
     console.log("shareScreen ");
+
+    const videoClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+    let tmpUid = uuid + "-shareScreen";
+    let alo = await videoClient.join(
+      config.appId,
+      channelName,
+      config.token,
+      tmpUid
+    );
+
+    const videoTrack = await AgoraRTC.createScreenVideoTrack({
+      encoderConfig: "1080p_1",
+    });
+    await videoClient.publish(videoTrack);
+    videoTrack.on("track-ended", async (data) => {
+      await videoClient.leave();
+    });
+
     // let screenStream = AgoraRTC.createStream({
     //   streamID: uuid,
     //   audio: false,
@@ -107,32 +126,32 @@ export default function Controls(props) {
     //   screen: true,
     // });
 
-    await tracks[0].setEnabled(false);
-    setTrackState((ps) => {
-      return { ...ps, audio: false };
-    });
-    await tracks[1].setEnabled(false);
-    setTrackState((ps) => {
-      return { ...ps, video: false };
-    });
+    // await tracks[0].setEnabled(false);
+    // setTrackState((ps) => {
+    //   return { ...ps, audio: false };
+    // });
+    // await tracks[1].setEnabled(false);
+    // setTrackState((ps) => {
+    //   return { ...ps, video: false };
+    // });
 
-    let trackScreen = await AgoraRTC.createScreenVideoTrack({
-      encoderConfig: "1080p_1",
-    });
-    if (trackScreen) {
-      client.publish(trackScreen);
-      await tracks[0].setEnabled(true);
-      setTrackState((ps) => {
-        return { ...ps, audio: true };
-      });
-      trackScreen.on("track-ended", async (data) => {
-        client.unpublish(trackScreen);
-        // await tracks[1].setEnabled(true);
-        // setTrackState((ps) => {
-        //   return { ...ps, video: true };
-        // });
-      });
-    }
+    // let trackScreen = await AgoraRTC.createScreenVideoTrack({
+    //   encoderConfig: "1080p_1",
+    // });
+    // if (trackScreen) {
+    //   // client.publish(trackScreen);
+    //   // await tracks[0].setEnabled(true);
+    //   // setTrackState((ps) => {
+    //   //   return { ...ps, audio: true };
+    //   // });
+    //   trackScreen.on("track-ended", async (data) => {
+    //     client.unpublish(trackScreen);
+    //     // await tracks[1].setEnabled(true);
+    //     // setTrackState((ps) => {
+    //     //   return { ...ps, video: true };
+    //     // });
+    //   });
+    // }
   };
 
   const showModal = () => {

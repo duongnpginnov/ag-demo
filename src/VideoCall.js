@@ -30,6 +30,7 @@ export default function VideoCall(props) {
   const [count, setCount] = useState(1);
   const [userAction, setUserAction] = useState({});
   const notInitialRender = useRef(false);
+  const [currentUserSharing, setCurrentUserSharing] = useState({});
 
   useEffect(() => {
     let init = async (name) => {
@@ -63,9 +64,13 @@ export default function VideoCall(props) {
       });
       client.on("user-joined", (user) => {
         console.log("test - user-joined", user);
-        setUsers((prevUsers) => {
-          return [...prevUsers, user];
-        });
+        if (user.uid?.includes("-shareScreen")) {
+          setCurrentUserSharing(user);
+        } else {
+          setUsers((prevUsers) => {
+            return [...prevUsers, user];
+          });
+        }
       });
 
       // client.on("user-info-updated", (uid, msg) => {
@@ -177,6 +182,7 @@ export default function VideoCall(props) {
               muteOther={muteOther}
               count={count}
               uuid={uuid}
+              currentUserSharing={currentUserSharing}
             />
           )}
         </Grid>

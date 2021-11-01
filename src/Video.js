@@ -17,7 +17,7 @@ import {
 import db from "./configFireBase";
 
 export default function Video(props) {
-  const { users, tracks, uuid } = props;
+  const { users, tracks, uuid, currentUserSharing } = props;
   const [gridSpacing, setGridSpacing] = useState(12);
   const usersRef = doc(db, "users", new Date().getTime().toString());
 
@@ -55,83 +55,31 @@ export default function Video(props) {
   };
 
   return (
-    <Grid container style={{ height: "100%" }}>
-      <Grid item xs={gridSpacing} style={{ padding: "10px" }}>
-        <AgoraVideoPlayer
-          videoTrack={tracks[1]}
-          style={{ height: "100%", width: "100%" }}
-          audioTrack={tracks[0]}
-        />
-      </Grid>
-      {users.length > 0 &&
-        users.map((user, index) => {
-          if (user.videoTrack) {
-            return (
-              <Grid
-                item
-                xs={gridSpacing}
-                style={{ padding: "10px", position: "relative" }}
-                key={index}
-              >
-                <AgoraVideoPlayer
-                  videoTrack={user.videoTrack}
-                  audioTrack={user.audioTrack}
-                  key={user.uid}
-                  style={{ height: "100%", width: "100%" }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "10px",
-                    left: "50%",
-                    fontSize: "30px",
-                    color: "white",
-                  }}
+    <>
+      <Grid container style={{ height: "100%" }}>
+        <Grid item xs={gridSpacing} style={{ padding: "10px" }}>
+          <AgoraVideoPlayer
+            videoTrack={tracks[1]}
+            style={{ height: "100%", width: "100%" }}
+            audioTrack={tracks[0]}
+          />
+        </Grid>
+        {users.length > 0 &&
+          users.map((user, index) => {
+            if (user.videoTrack) {
+              return (
+                <Grid
+                  item
+                  xs={gridSpacing}
+                  style={{ padding: "10px", position: "relative" }}
+                  key={index}
                 >
-                  {user.uid}
-                </div>
-                <div style={{ position: "absolute", top: "10px" }}>
-                  <Button
-                    variant="contained"
-                    color={user.audioTrack ? "primary" : "secondary"}
-                    disabled={uuid != "host"}
-                    onClick={() =>
-                      hostToggleMicOfPaticipant(
-                        user.uid,
-                        user.audioTrack ? true : false
-                      )
-                    }
-                  >
-                    {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
-                  </Button>
-                </div>
-                <div style={{ position: "absolute", top: "60px" }}>
-                  <Button
-                    variant="contained"
-                    color={user.videoTrack ? "primary" : "secondary"}
-                    // onClick={() => mute("video")}
-                    disabled={uuid != "host"}
-                    onClick={() =>
-                      hostToggleCamOfPaticipant(
-                        user.uid,
-                        user.videoTrack ? true : false
-                      )
-                    }
-                  >
-                    {user.videoTrack ? <VideocamIcon /> : <VideocamOffIcon />}
-                  </Button>
-                </div>
-              </Grid>
-            );
-          } else
-            return (
-              <Grid
-                item
-                xs={gridSpacing}
-                style={{ padding: "10px", position: "relative" }}
-                key={index}
-              >
-                <div style={{ backgroundColor: "black", height: "100%" }}>
+                  <AgoraVideoPlayer
+                    videoTrack={user.videoTrack}
+                    audioTrack={user.audioTrack}
+                    key={user.uid}
+                    style={{ height: "100%", width: "100%" }}
+                  />
                   <div
                     style={{
                       position: "absolute",
@@ -147,7 +95,6 @@ export default function Video(props) {
                     <Button
                       variant="contained"
                       color={user.audioTrack ? "primary" : "secondary"}
-                      // onClick={() => mute("video")}
                       disabled={uuid != "host"}
                       onClick={() =>
                         hostToggleMicOfPaticipant(
@@ -175,10 +122,79 @@ export default function Video(props) {
                       {user.videoTrack ? <VideocamIcon /> : <VideocamOffIcon />}
                     </Button>
                   </div>
-                </div>
-              </Grid>
-            );
-        })}
-    </Grid>
+                </Grid>
+              );
+            } else
+              return (
+                <Grid
+                  item
+                  xs={gridSpacing}
+                  style={{ padding: "10px", position: "relative" }}
+                  key={index}
+                >
+                  <div style={{ backgroundColor: "black", height: "100%" }}>
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        left: "50%",
+                        fontSize: "30px",
+                        color: "white",
+                      }}
+                    >
+                      {user.uid}
+                    </div>
+                    <div style={{ position: "absolute", top: "10px" }}>
+                      <Button
+                        variant="contained"
+                        color={user.audioTrack ? "primary" : "secondary"}
+                        // onClick={() => mute("video")}
+                        disabled={uuid != "host"}
+                        onClick={() =>
+                          hostToggleMicOfPaticipant(
+                            user.uid,
+                            user.audioTrack ? true : false
+                          )
+                        }
+                      >
+                        {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
+                      </Button>
+                    </div>
+                    <div style={{ position: "absolute", top: "60px" }}>
+                      <Button
+                        variant="contained"
+                        color={user.videoTrack ? "primary" : "secondary"}
+                        // onClick={() => mute("video")}
+                        disabled={uuid != "host"}
+                        onClick={() =>
+                          hostToggleCamOfPaticipant(
+                            user.uid,
+                            user.videoTrack ? true : false
+                          )
+                        }
+                      >
+                        {user.videoTrack ? (
+                          <VideocamIcon />
+                        ) : (
+                          <VideocamOffIcon />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </Grid>
+              );
+          })}
+      </Grid>
+      {currentUserSharing?.hasOwnProperty("uid") &&
+      currentUserSharing.videoTrack ? (
+        <div style={{ height: "500px", width: "100%" }}>
+          <AgoraVideoPlayer
+            videoTrack={currentUserSharing.videoTrack}
+            audioTrack={currentUserSharing.audioTrack}
+            style={{ height: "100%", width: "100%" }}
+          />
+        </div>
+      ) : null}
+    </>
   );
 }
