@@ -31,11 +31,26 @@ export default function Video(props) {
         name: "test 8",
         uid: uid,
         status: status ? false : true,
-        type: "one",
+        type: "mic", // "cam", "survey",
         timestamp: new Date().getTime(),
+        value: "one", // "one"
       });
     } else return void 0;
   };
+
+  const hostToggleCamOfPaticipant = async (uid, status) => {
+    if (uuid == "host") {
+      const docRef = await addDoc(collection(db, "users"), {
+        name: "test 8",
+        uid: uid,
+        status: status ? false : true,
+        type: "cam", // "cam", "survey",
+        timestamp: new Date().getTime(),
+        value: "one", // "one"
+      });
+    } else return void 0;
+  };
+
   return (
     <Grid container style={{ height: "100%" }}>
       <Grid item xs={gridSpacing} style={{ padding: "10px" }}>
@@ -93,6 +108,12 @@ export default function Video(props) {
                     color={user.videoTrack ? "primary" : "secondary"}
                     // onClick={() => mute("video")}
                     disabled={uuid != "host"}
+                    onClick={() =>
+                      hostToggleCamOfPaticipant(
+                        user.uid,
+                        user.videoTrack ? true : false
+                      )
+                    }
                   >
                     {user.videoTrack ? <VideocamIcon /> : <VideocamOffIcon />}
                   </Button>
@@ -141,6 +162,12 @@ export default function Video(props) {
                       color={user.videoTrack ? "primary" : "secondary"}
                       // onClick={() => mute("video")}
                       disabled={uuid != "host"}
+                      onClick={() =>
+                        hostToggleCamOfPaticipant(
+                          user.uid,
+                          user.videoTrack ? true : false
+                        )
+                      }
                     >
                       {user.videoTrack ? <VideocamIcon /> : <VideocamOffIcon />}
                     </Button>

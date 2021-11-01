@@ -30,7 +30,7 @@ export default function Controls(props) {
 
   useEffect(() => {
     console.log("muteOther ", muteOther);
-    const alo = async () => {
+    const handleChange = async () => {
       // if (uuid == 22) {
       await tracks[0].setEnabled(muteOther ? false : true);
       setTrackState((ps) => {
@@ -39,32 +39,41 @@ export default function Controls(props) {
       // }
     };
 
-    alo();
+    handleChange();
   }, [muteOther]);
 
   useEffect(() => {
     console.log("test - userAction control ", userAction);
-    const alo = async (status) => {
-      // if (uuid == 22) {
-      await tracks[0].setEnabled(status);
-      setTrackState((ps) => {
-        return { ...ps, audio: status };
-      });
-      // }
+    const handleChange = async (type, status) => {
+      if (type == "mic") {
+        await tracks[0].setEnabled(status);
+        setTrackState((ps) => {
+          return { ...ps, audio: status };
+        });
+      } else if (type == "cam") {
+        await tracks[1].setEnabled(status);
+        setTrackState((ps) => {
+          return { ...ps, video: status };
+        });
+      }
     };
     if (userAction && userAction.hasOwnProperty("timestamp")) {
-      if (userAction.type == "muteAll") {
-        if (uuid != "host") {
-          alo(true);
+      if (userAction.type == "mic") {
+        if (userAction.value == "all" && uuid != "host") {
+          handleChange("mic", !userAction.status);
+        } else if (userAction.value == "one") {
+          if (userAction.uid == uuid) {
+            handleChange("mic", userAction.status);
+          }
         }
-      } else if (userAction.type == "unMuteAll") {
-        if (uuid != "host") {
-          alo(false);
-        }
-      } else {
-        if (userAction.uid == uuid) {
-          console.log("test - userAction control toggle");
-          alo(userAction.status);
+      }
+      if (userAction.type == "cam") {
+        if (userAction.value == "all" && uuid != "host") {
+          // coming soon
+        } else if (userAction.value == "one") {
+          if (userAction.uid == uuid) {
+            handleChange("cam", userAction.status);
+          }
         }
       }
     }
@@ -105,8 +114,9 @@ export default function Controls(props) {
       name: "test 8",
       uid: 9999999999,
       status: true,
-      type: "survey",
+      type: "survey", // "cam", "survey",
       timestamp: new Date().getTime(),
+      value: "all",
     });
     setIsModalVisible(false);
   };
@@ -141,8 +151,9 @@ export default function Controls(props) {
       name: "test 8",
       uid: 9999999999,
       status: true,
-      type: "unMuteAll",
+      type: "mic", // "cam", "survey",
       timestamp: new Date().getTime(),
+      value: "all", // "one"
     });
   };
 
@@ -150,9 +161,10 @@ export default function Controls(props) {
     const docRef = await addDoc(collection(db, "users"), {
       name: "test 8",
       uid: 9999999999,
-      status: true,
-      type: "muteAll",
+      status: false,
+      type: "mic", // "cam", "survey",
       timestamp: new Date().getTime(),
+      value: "all", // "one"
     });
   };
 
