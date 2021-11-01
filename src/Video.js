@@ -11,12 +11,15 @@ import {
   getDocs,
   addDoc,
   onSnapshot,
+  doc,
+  setDoc,
 } from "firebase/firestore";
 import db from "./configFireBase";
 
 export default function Video(props) {
   const { users, tracks, uuid } = props;
   const [gridSpacing, setGridSpacing] = useState(12);
+  const usersRef = doc(db, "users", new Date().getTime().toString());
 
   useEffect(() => {
     setGridSpacing(Math.max(Math.floor(12 / (users.length + 1)), 4));
@@ -27,7 +30,7 @@ export default function Video(props) {
     console.log("test - hostToggleMicOfPaticipant uid ", uid);
     console.log("test - hostToggleMicOfPaticipant status ", status);
     if (uuid == "host") {
-      const docRef = await addDoc(collection(db, "users"), {
+      const updateTimestamp = await setDoc(usersRef, {
         name: "test 8",
         uid: uid,
         status: status ? false : true,
@@ -40,7 +43,7 @@ export default function Video(props) {
 
   const hostToggleCamOfPaticipant = async (uid, status) => {
     if (uuid == "host") {
-      const docRef = await addDoc(collection(db, "users"), {
+      const updateTimestamp = await setDoc(usersRef, {
         name: "test 8",
         uid: uid,
         status: status ? false : true,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   config,
   useClient,
@@ -29,6 +29,7 @@ export default function VideoCall(props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [count, setCount] = useState(1);
   const [userAction, setUserAction] = useState({});
+  const notInitialRender = useRef(false);
 
   useEffect(() => {
     let init = async (name) => {
@@ -104,14 +105,17 @@ export default function VideoCall(props) {
         console.log("test - start listen ", snapshot);
         const userListListen = snapshot.docs.map((doc) => doc.data());
         console.log("test - start userListListen ", userListListen);
-        let tmpList = userListListen.length ? userListListen.sort(compare) : [];
-        console.log("test - start tmpList after sort ", tmpList);
-        let userAc = tmpList.pop();
+        let userAc = userListListen.length && userListListen.pop();
         console.log("test - start userAc ", userAc);
-        if (userAc && userAc.type == "survey" && uuid != "host") {
-          setIsModalVisible(true);
+        if (notInitialRender.current) {
+          if (userAc && userAc.type == "survey" && uuid != "host") {
+            setIsModalVisible(true);
+          }
+          setUserAction(userAc);
+        } else {
+          //ignore for first time
+          notInitialRender.current = true;
         }
-        setUserAction(userAc);
       },
       (error) => {
         console.log("test - start listen error ", error);

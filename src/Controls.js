@@ -16,6 +16,9 @@ import {
   getDocs,
   addDoc,
   onSnapshot,
+  setDoc,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
 import db from "./configFireBase";
 
@@ -27,6 +30,8 @@ export default function Controls(props) {
   const [shareScreen, setShareScreen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalStudent, setIsModalStudent] = useState(false);
+
+  const usersRef = doc(db, "users", new Date().getTime().toString());
 
   useEffect(() => {
     console.log("muteOther ", muteOther);
@@ -95,13 +100,19 @@ export default function Controls(props) {
 
   const handleShareScreen = () => {
     console.log("shareScreen ");
+    // let screenStream = AgoraRTC.createStream({
+    //   streamID: uuid,
+    //   audio: false,
+    //   video: false,
+    //   screen: true,
+    // });
+
     AgoraRTC.createScreenVideoTrack({
       encoderConfig: "1080p_1",
-      optimizationMode: "detail",
     }).then((localScreenTrack) => {
       /** ... **/
       console.log("localScreenTrack ", localScreenTrack);
-      // client.publish(localScreenTrack);
+      client.publish(localScreenTrack);
     });
   };
 
@@ -110,7 +121,7 @@ export default function Controls(props) {
   };
 
   const handleOk = async () => {
-    const docRef = await addDoc(collection(db, "users"), {
+    const updateTimestamp = await setDoc(usersRef, {
       name: "test 8",
       uid: 9999999999,
       status: true,
@@ -147,7 +158,7 @@ export default function Controls(props) {
   };
 
   const turnOnMic = async () => {
-    const docRef = await addDoc(collection(db, "users"), {
+    const updateTimestamp = await setDoc(usersRef, {
       name: "test 8",
       uid: 9999999999,
       status: true,
@@ -155,10 +166,19 @@ export default function Controls(props) {
       timestamp: new Date().getTime(),
       value: "all", // "one"
     });
+
+    // const docRef = await setDoc(collection(db, "users", "sadasd"), {
+    //   name: "test 8",
+    //   uid: 9999999999,
+    //   status: true,
+    //   type: "mic", // "cam", "survey",
+    //   timestamp: new Date().getTime(),
+    //   value: "all", // "one"
+    // });
   };
 
   const turnOffMic = async () => {
-    const docRef = await addDoc(collection(db, "users"), {
+    const updateTimestamp = await setDoc(usersRef, {
       name: "test 8",
       uid: 9999999999,
       status: false,
