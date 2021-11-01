@@ -65,7 +65,7 @@ export default function Controls(props) {
     if (userAction && userAction.hasOwnProperty("timestamp")) {
       if (userAction.type == "mic") {
         if (userAction.value == "all" && uuid != "host") {
-          handleChange("mic", !userAction.status);
+          handleChange("mic", userAction.status);
         } else if (userAction.value == "one") {
           if (userAction.uid == uuid) {
             handleChange("mic", userAction.status);
@@ -98,7 +98,7 @@ export default function Controls(props) {
     }
   };
 
-  const handleShareScreen = () => {
+  const handleShareScreen = async () => {
     console.log("shareScreen ");
     // let screenStream = AgoraRTC.createStream({
     //   streamID: uuid,
@@ -107,13 +107,32 @@ export default function Controls(props) {
     //   screen: true,
     // });
 
-    AgoraRTC.createScreenVideoTrack({
-      encoderConfig: "1080p_1",
-    }).then((localScreenTrack) => {
-      /** ... **/
-      console.log("localScreenTrack ", localScreenTrack);
-      client.publish(localScreenTrack);
+    await tracks[0].setEnabled(false);
+    setTrackState((ps) => {
+      return { ...ps, audio: false };
     });
+    await tracks[1].setEnabled(false);
+    setTrackState((ps) => {
+      return { ...ps, video: false };
+    });
+
+    let trackScreen = await AgoraRTC.createScreenVideoTrack({
+      encoderConfig: "1080p_1",
+    });
+    if (trackScreen) {
+      client.publish(trackScreen);
+      await tracks[0].setEnabled(true);
+      setTrackState((ps) => {
+        return { ...ps, audio: true };
+      });
+      trackScreen.on("track-ended", async (data) => {
+        client.unpublish(trackScreen);
+        // await tracks[1].setEnabled(true);
+        // setTrackState((ps) => {
+        //   return { ...ps, video: true };
+        // });
+      });
+    }
   };
 
   const showModal = () => {
@@ -223,12 +242,12 @@ export default function Controls(props) {
         {uuid == "host" ? (
           <>
             <Grid item>
-              <Button variant="contained" color="primary" onClick={turnOnMic}>
+              <Button variant="contained" color="primary" onClick={turnOffMic}>
                 Mute All
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="primary" onClick={turnOffMic}>
+              <Button variant="contained" color="primary" onClick={turnOnMic}>
                 Unmute All
               </Button>
             </Grid>
