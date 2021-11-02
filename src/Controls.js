@@ -130,14 +130,18 @@ export default function Controls(props) {
     const videoClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
     let tmpUid = uuid + "-shareScreen-9999";
     let alo = await videoClient.join(appId, channelName, token, tmpUid);
-
-    const videoTrack = await AgoraRTC.createScreenVideoTrack({
-      encoderConfig: "1080p_1",
-    });
-    await videoClient.publish(videoTrack);
-    videoTrack.on("track-ended", async (data) => {
+    try {
+      const videoTrack = await AgoraRTC.createScreenVideoTrack({
+        encoderConfig: "1080p_1",
+      });
+      await videoClient.publish(videoTrack);
+      videoTrack.on("track-ended", async (data) => {
+        await videoClient.leave();
+      });
+    } catch (error) {
+      console.log("test- error ", error);
       await videoClient.leave();
-    });
+    }
 
     // let screenStream = AgoraRTC.createStream({
     //   streamID: uuid,

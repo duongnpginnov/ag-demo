@@ -299,6 +299,7 @@ export default function Video(props) {
             videoTrack={currentUserSharing.videoTrack}
             audioTrack={currentUserSharing.audioTrack}
             style={{ height: "100%", width: "100%" }}
+            className="video-sharing"
           />
         </div>
       ) : null}

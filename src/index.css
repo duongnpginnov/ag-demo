@@ -51,3 +51,7 @@ code {
   height: 100%;
   width: 100%;
 }
+
+.video-sharing .agora_video_player {
+  object-fit: contain !important;
+}

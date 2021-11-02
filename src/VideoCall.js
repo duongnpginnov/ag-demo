@@ -11,7 +11,6 @@ import { Grid } from "@material-ui/core";
 import Video from "./Video";
 import Controls from "./Controls";
 import Survey from "./Survey";
-// import TestFireBase from "./TestFireBase";
 import db from "./configFireBase";
 import {
   getFirestore,
