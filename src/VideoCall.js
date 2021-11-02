@@ -3,7 +3,9 @@ import {
   config,
   useClient,
   useMicrophoneAndCameraTracks,
-  channelName,
+  // channelName,
+  appId,
+  // token,
 } from "./settings.js";
 import { Grid } from "@material-ui/core";
 import Video from "./Video";
@@ -20,7 +22,7 @@ import {
 } from "firebase/firestore";
 
 export default function VideoCall(props) {
-  const { setInCall, uuid } = props;
+  const { setInCall, uuid, channelName, token } = props;
   const [users, setUsers] = useState([]);
   const [start, setStart] = useState(false);
   const client = useClient();
@@ -85,7 +87,7 @@ export default function VideoCall(props) {
       // });
 
       try {
-        let alo = await client.join(config.appId, name, config.token, uuid);
+        let alo = await client.join(appId, name, token, uuid);
       } catch (error) {
         console.log("test - error");
       }
@@ -186,6 +188,8 @@ export default function VideoCall(props) {
               count={count}
               userAction={userAction}
               currentUserSharing={currentUserSharing}
+              channelName={channelName}
+              token={token}
             />
           )}
         </Grid>

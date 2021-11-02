@@ -7,7 +7,7 @@ import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ScreenShareIcon from "@material-ui/icons/ScreenShare";
-import { config, channelName } from "./settings.js";
+import { config, appId } from "./settings.js";
 
 import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
 import { Modal } from "antd";
@@ -34,6 +34,8 @@ export default function Controls(props) {
     users,
     userAction,
     currentUserSharing,
+    channelName,
+    token,
   } = props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
   const [shareScreen, setShareScreen] = useState(false);
@@ -127,12 +129,7 @@ export default function Controls(props) {
 
     const videoClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
     let tmpUid = uuid + "-shareScreen-9999";
-    let alo = await videoClient.join(
-      config.appId,
-      channelName,
-      config.token,
-      tmpUid
-    );
+    let alo = await videoClient.join(appId, channelName, token, tmpUid);
 
     const videoTrack = await AgoraRTC.createScreenVideoTrack({
       encoderConfig: "1080p_1",
