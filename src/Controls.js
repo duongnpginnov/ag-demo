@@ -25,8 +25,16 @@ import db from "./configFireBase";
 
 export default function Controls(props) {
   const client = useClient();
-  const { tracks, setStart, setInCall, muteOther, uuid, users, userAction } =
-    props;
+  const {
+    tracks,
+    setStart,
+    setInCall,
+    muteOther,
+    uuid,
+    users,
+    userAction,
+    currentUserSharing,
+  } = props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
   const [shareScreen, setShareScreen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -63,6 +71,15 @@ export default function Controls(props) {
         });
       }
     };
+    const handleKickOut = async () => {
+      await client.leave();
+      client.removeAllListeners();
+      tracks[0].close();
+      tracks[1].close();
+      setStart(false);
+      setInCall(false);
+    };
+
     if (userAction && userAction.hasOwnProperty("timestamp")) {
       if (userAction.type == "mic") {
         if (userAction.value == "all" && uuid != "host") {
@@ -72,14 +89,20 @@ export default function Controls(props) {
             handleChange("mic", userAction.status);
           }
         }
-      }
-      if (userAction.type == "cam") {
+      } else if (userAction.type == "cam") {
         if (userAction.value == "all" && uuid != "host") {
           // coming soon
         } else if (userAction.value == "one") {
           if (userAction.uid == uuid) {
             handleChange("cam", userAction.status);
           }
+        }
+      } else if (userAction.type == "kick") {
+        if (
+          (userAction.value == "one" && uuid == userAction.uid) ||
+          userAction.value == "all"
+        ) {
+          handleKickOut();
         }
       }
     }
@@ -103,7 +126,7 @@ export default function Controls(props) {
     console.log("shareScreen ");
 
     const videoClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-    let tmpUid = uuid + "-shareScreen";
+    let tmpUid = uuid + "-shareScreen-9999";
     let alo = await videoClient.join(
       config.appId,
       channelName,
@@ -193,6 +216,16 @@ export default function Controls(props) {
     tracks[1].close();
     setStart(false);
     setInCall(false);
+    if (uuid == "host") {
+      const updateTimestamp = await setDoc(usersRef, {
+        name: "test 8",
+        uid: 9999999999,
+        status: false,
+        type: "kick", // "cam", "survey",
+        timestamp: new Date().getTime(),
+        value: "all", // "one"
+      });
+    }
   };
 
   const turnOnMic = async () => {
@@ -254,6 +287,10 @@ export default function Controls(props) {
             variant="contained"
             color="primary"
             onClick={handleShareScreen}
+            disabled={
+              currentUserSharing?.hasOwnProperty("uid") &&
+              currentUserSharing?.videoTrack
+            }
           >
             <ScreenShareIcon />
           </Button>

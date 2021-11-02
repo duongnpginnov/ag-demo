@@ -64,7 +64,7 @@ export default function VideoCall(props) {
       });
       client.on("user-joined", (user) => {
         console.log("test - user-joined", user);
-        if (user.uid?.includes("-shareScreen")) {
+        if (user.uid?.includes("-shareScreen-9999")) {
           setCurrentUserSharing(user);
         } else {
           setUsers((prevUsers) => {
@@ -106,17 +106,31 @@ export default function VideoCall(props) {
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(db, "users"),
-      (snapshot) => {
+      async (snapshot) => {
         console.log("test - start listen ", snapshot);
         const userListListen = snapshot.docs.map((doc) => doc.data());
         console.log("test - start userListListen ", userListListen);
         let userAc = userListListen.length && userListListen.pop();
         console.log("test - start userAc ", userAc);
         if (notInitialRender.current) {
+          // if (userAc && userAc.type == "kick") {
+          //   if (
+          //     (userAc.value == "one" && uuid == userAc.uid) ||
+          //     userAc.value == "all"
+          //   ) {
+          //     tracks && tracks[0].close();
+          //     tracks && tracks[1].close();
+          //     await client.leave();
+          //     client.removeAllListeners();
+          //     setStart(false);
+          //     setInCall(false);
+          //   }
+          // } else {
           if (userAc && userAc.type == "survey" && uuid != "host") {
             setIsModalVisible(true);
           }
           setUserAction(userAc);
+          // }
         } else {
           //ignore for first time
           notInitialRender.current = true;
@@ -171,10 +185,19 @@ export default function VideoCall(props) {
               users={users}
               count={count}
               userAction={userAction}
+              currentUserSharing={currentUserSharing}
             />
           )}
         </Grid>
-        <Grid item style={{ height: "95%" }}>
+        <Grid
+          item
+          className={
+            currentUserSharing?.hasOwnProperty("uid") &&
+            currentUserSharing.videoTrack
+              ? "grid-sharing"
+              : "grid-normal"
+          }
+        >
           {start && tracks && (
             <Video
               tracks={tracks}

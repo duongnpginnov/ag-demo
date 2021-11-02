@@ -5,6 +5,7 @@ import MicIcon from "@material-ui/icons/Mic";
 import MicOffIcon from "@material-ui/icons/MicOff";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import {
   getFirestore,
   collection,
@@ -15,10 +16,13 @@ import {
   setDoc,
 } from "firebase/firestore";
 import db from "./configFireBase";
+import { Modal, Space } from "antd";
 
 export default function Video(props) {
   const { users, tracks, uuid, currentUserSharing } = props;
   const [gridSpacing, setGridSpacing] = useState(12);
+  const [showConfirmKick, setShowConfirmKick] = useState(false);
+  const [kickName, setKickName] = useState("");
   const usersRef = doc(db, "users", new Date().getTime().toString());
 
   useEffect(() => {
@@ -54,13 +58,63 @@ export default function Video(props) {
     } else return void 0;
   };
 
+  const hostKickPaticipant = async (uid, status) => {
+    setKickName(uid);
+    setShowConfirmKick(true);
+  };
+
+  const handleCancel = () => {
+    setShowConfirmKick(false);
+  };
+
+  const handleOk = async () => {
+    setShowConfirmKick(false);
+    const updateTimestamp = await setDoc(usersRef, {
+      name: "test 8",
+      uid: kickName,
+      status: true,
+      type: "kick", // "cam", "survey",
+      timestamp: new Date().getTime(),
+      value: "one", // "one"
+    });
+  };
+  console.log("test - currentUserSharing ", currentUserSharing);
+
   return (
     <>
-      <Grid container style={{ height: "100%" }}>
-        <Grid item xs={gridSpacing} style={{ padding: "10px" }}>
+      <Grid
+        container
+        className={
+          currentUserSharing?.hasOwnProperty("uid") &&
+          currentUserSharing.videoTrack
+            ? "grid-video-sharing"
+            : "grid-video-normal"
+        }
+      >
+        <Grid
+          item
+          xs={
+            currentUserSharing?.hasOwnProperty("uid") &&
+            currentUserSharing.videoTrack
+              ? 24
+              : gridSpacing
+          }
+          style={{ padding: "10px" }}
+        >
           <AgoraVideoPlayer
             videoTrack={tracks[1]}
-            style={{ height: "100%", width: "100%" }}
+            style={{
+              height:
+                currentUserSharing?.hasOwnProperty("uid") &&
+                currentUserSharing.videoTrack
+                  ? "200px"
+                  : "100%",
+              width:
+                currentUserSharing?.hasOwnProperty("uid") &&
+                currentUserSharing.videoTrack
+                  ? "200px"
+                  : "100%",
+            }}
             audioTrack={tracks[0]}
           />
         </Grid>
@@ -70,7 +124,12 @@ export default function Video(props) {
               return (
                 <Grid
                   item
-                  xs={gridSpacing}
+                  xs={
+                    currentUserSharing?.hasOwnProperty("uid") &&
+                    currentUserSharing.videoTrack
+                      ? 24
+                      : gridSpacing
+                  }
                   style={{ padding: "10px", position: "relative" }}
                   key={index}
                 >
@@ -78,7 +137,18 @@ export default function Video(props) {
                     videoTrack={user.videoTrack}
                     audioTrack={user.audioTrack}
                     key={user.uid}
-                    style={{ height: "100%", width: "100%" }}
+                    style={{
+                      height:
+                        currentUserSharing?.hasOwnProperty("uid") &&
+                        currentUserSharing.videoTrack
+                          ? "200px"
+                          : "100%",
+                      width:
+                        currentUserSharing?.hasOwnProperty("uid") &&
+                        currentUserSharing.videoTrack
+                          ? "200px"
+                          : "100%",
+                    }}
                   />
                   <div
                     style={{
@@ -106,7 +176,7 @@ export default function Video(props) {
                       {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
                     </Button>
                   </div>
-                  <div style={{ position: "absolute", top: "60px" }}>
+                  <div style={{ position: "absolute", top: "70px" }}>
                     <Button
                       variant="contained"
                       color={user.videoTrack ? "primary" : "secondary"}
@@ -122,6 +192,17 @@ export default function Video(props) {
                       {user.videoTrack ? <VideocamIcon /> : <VideocamOffIcon />}
                     </Button>
                   </div>
+                  {uuid != "host" ? null : (
+                    <div style={{ position: "absolute", top: "130px" }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => hostKickPaticipant(user.uid)}
+                      >
+                        <ExitToAppIcon />
+                      </Button>
+                    </div>
+                  )}
                 </Grid>
               );
             } else
@@ -132,11 +213,26 @@ export default function Video(props) {
                   style={{ padding: "10px", position: "relative" }}
                   key={index}
                 >
-                  <div style={{ backgroundColor: "black", height: "100%" }}>
+                  <div
+                    style={{
+                      backgroundColor: "black",
+                      height:
+                        currentUserSharing?.hasOwnProperty("uid") &&
+                        currentUserSharing.videoTrack
+                          ? "200px"
+                          : "100%",
+                      width:
+                        currentUserSharing?.hasOwnProperty("uid") &&
+                        currentUserSharing.videoTrack
+                          ? "200px"
+                          : "100%",
+                      position: "relative",
+                    }}
+                  >
                     <div
                       style={{
                         position: "absolute",
-                        top: "10px",
+                        top: "0",
                         left: "50%",
                         fontSize: "30px",
                         color: "white",
@@ -144,7 +240,7 @@ export default function Video(props) {
                     >
                       {user.uid}
                     </div>
-                    <div style={{ position: "absolute", top: "10px" }}>
+                    <div style={{ position: "absolute", top: "0" }}>
                       <Button
                         variant="contained"
                         color={user.audioTrack ? "primary" : "secondary"}
@@ -180,6 +276,17 @@ export default function Video(props) {
                         )}
                       </Button>
                     </div>
+                    {uuid != "host" ? null : (
+                      <div style={{ position: "absolute", top: "120px" }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => hostKickPaticipant(user.uid)}
+                        >
+                          <ExitToAppIcon />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </Grid>
               );
@@ -187,7 +294,7 @@ export default function Video(props) {
       </Grid>
       {currentUserSharing?.hasOwnProperty("uid") &&
       currentUserSharing.videoTrack ? (
-        <div style={{ height: "500px", width: "100%" }}>
+        <div style={{ height: "95%", width: "100%", padding: "10px" }}>
           <AgoraVideoPlayer
             videoTrack={currentUserSharing.videoTrack}
             audioTrack={currentUserSharing.audioTrack}
@@ -195,6 +302,19 @@ export default function Video(props) {
           />
         </div>
       ) : null}
+      <Modal
+        title="Kick User"
+        visible={showConfirmKick}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Confim"
+        cancelText="Cancel"
+      >
+        <p>
+          Do you want to kick{" "}
+          <span style={{ fontWeight: "bolder" }}>{kickName}</span> ?
+        </p>
+      </Modal>
     </>
   );
 }
