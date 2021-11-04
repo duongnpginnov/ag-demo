@@ -59,6 +59,9 @@ export default function VideoCall(props) {
 
       client.on("user-left", (user) => {
         console.log("test -  left room ", user);
+        if (user.uid?.includes("-shareScreen-9999")) {
+          setCurrentUserSharing({});
+        }
         setUsers((prevUsers) => {
           return prevUsers.filter((User) => User.uid !== user.uid);
         });
@@ -75,14 +78,14 @@ export default function VideoCall(props) {
       });
 
       // client.on("user-info-updated", (uid, msg) => {
-      //   if (uid == "host") {
-      //     if (msg == "unmute-audio") {
-      //       setMuteOther(false);
-      //     } else if (msg == "mute-audio") {
-      //       console.log("test - mute other start");
-      //       setMuteOther(true);
-      //     }
-      //   }
+      //   console.log("test - user-info-updated ", uid);
+      // });
+
+      // client.enableAudioVolumeIndicator();
+      // client.on("volume-indicator", (volumes) => {
+      //   volumes.forEach((volume, index) => {
+      //     console.log(`test -  UID ${volume.uid} Level ${volume.level}`);
+      //   });
       // });
 
       try {
