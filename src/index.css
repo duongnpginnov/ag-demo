@@ -107,15 +107,79 @@ code {
 }
 .channel-item .ant-image,
 .channel-item .ant-image-img {
-  height: 100% !important;
+  height: 110px !important;
 }
 
 .add-class {
   margin-top: 30px;
   text-align: left;
-  margin-left: 50px;
+  margin-left: 35px;
 }
 
 .ant-btn {
   border-radius: 20px;
+}
+
+.channel-item .ant-col-4 {
+  max-width: 110px !important;
+}
+
+.custom-video {
+  display: flex;
+  height: 100%;
+}
+
+.custom-video-cam {
+  height: 100%;
+  width: 100%;
+}
+.custom-video-list {
+  width: 250px;
+  display: block;
+  overflow: auto;
+  padding: 10px;
+}
+
+.custom-video-list .ant-list {
+  height: 100%;
+  overflow: auto;
+  background: #4061e0;
+}
+
+.custom-video-list .ant-list .ant-list-item {
+  color: white;
+  font-weight: bolder;
+}
+
+.channel-name {
+  margin-bottom: -5px;
+  color: white;
+  font-size: 18px;
+}
+
+.video-item button {
+  height: 35px;
+  width: 40px;
+  min-width: 40px;
+}
+
+.channel-option {
+  display: flex;
+  height: 50px;
+}
+
+.channel-option .ant-btn {
+  width: 200px;
+  margin: 0 10px;
+  background: #727765;
+  border-radius: 10px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.channel-option .ant-btn.class-end {
+  width: 190px;
+  margin-left: auto;
 }

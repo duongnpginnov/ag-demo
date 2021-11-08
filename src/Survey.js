@@ -8,7 +8,7 @@ export default function Survey(props) {
   const [selectValue, setSelectValue] = useState(1);
 
   useEffect(() => {
-    let timeToEnd = 10;
+    let timeToEnd = 60;
     let timeShowInterview = setInterval(() => {
       timeToEnd -= 1;
       setTimeShowSurvey(timeToEnd);
@@ -17,7 +17,7 @@ export default function Survey(props) {
       console.log("close modal");
       clearInterval(timeShowInterview);
       handleOk();
-    }, 9800);
+    }, 59800);
     return () => {
       clearTimeout(timeshowTimeout);
       clearInterval(timeShowInterview);

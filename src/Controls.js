@@ -42,7 +42,7 @@ export default function Controls(props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalStudent, setIsModalStudent] = useState(false);
 
-  const usersRef = doc(db, "users", new Date().getTime().toString());
+  const usersRef = doc(db, "users-test", new Date().getTime().toString());
 
   useEffect(() => {
     console.log("muteOther ", muteOther);
@@ -239,7 +239,7 @@ export default function Controls(props) {
       value: "all", // "one"
     });
 
-    // const docRef = await setDoc(collection(db, "users", "sadasd"), {
+    // const docRef = await setDoc(collection(db, "users-test", "sadasd"), {
     //   name: "test 8",
     //   uid: 9999999999,
     //   status: true,

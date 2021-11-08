@@ -18,7 +18,10 @@ import {
   getDocs,
   addDoc,
   onSnapshot,
+  setDoc,
+  doc,
 } from "firebase/firestore";
+import { Button, Modal } from "antd";
 
 export default function VideoCall(props) {
   const { setInCall, uuid, channelName, token } = props;
@@ -32,6 +35,9 @@ export default function VideoCall(props) {
   const [userAction, setUserAction] = useState({});
   const notInitialRender = useRef(false);
   const [currentUserSharing, setCurrentUserSharing] = useState({});
+  const [isModalQuestion, setIsModalQuestion] = useState(false);
+  const [typeQuestion, setTypeQuestion] = useState("");
+  const usersRef = doc(db, "users-test", new Date().getTime().toString());
 
   useEffect(() => {
     let init = async (name) => {
@@ -109,7 +115,7 @@ export default function VideoCall(props) {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      collection(db, "users"),
+      collection(db, "users-test"),
       async (snapshot) => {
         console.log("test - start listen ", snapshot);
         const userListListen = snapshot.docs.map((doc) => doc.data());
@@ -167,8 +173,48 @@ export default function VideoCall(props) {
     setIsModalVisible(false);
   };
 
+  const handleQuestionOk = async () => {
+    const updateTimestamp = await setDoc(usersRef, {
+      name: "test 8",
+      uid: 9999999999,
+      status: true,
+      type: "survey", // "cam", "survey",
+      timestamp: new Date().getTime(),
+      value: "all",
+    });
+    setIsModalQuestion(false);
+  };
+
+  const handleQuestionCancel = () => {
+    setIsModalQuestion(false);
+  };
+
   const updateFirebaseState = (data) => {
     console.log("test - updateFirebaseState ", data);
+  };
+
+  const leaveChannel = async () => {
+    await client.leave();
+    client.removeAllListeners();
+    tracks[0].close();
+    tracks[1].close();
+    setStart(false);
+    setInCall(false);
+    if (uuid == "host") {
+      const updateTimestamp = await setDoc(usersRef, {
+        name: "test 8",
+        uid: 9999999999,
+        status: false,
+        type: "kick", // "cam", "survey",
+        timestamp: new Date().getTime(),
+        value: "all", // "one"
+      });
+    }
+  };
+
+  const showQuestion = (type) => {
+    setTypeQuestion(type == "quiz" ? "quiz" : "question");
+    setIsModalQuestion(true);
   };
 
   return (
@@ -195,26 +241,53 @@ export default function VideoCall(props) {
             />
           )}
         </Grid>
-        <Grid
-          item
-          className={
-            currentUserSharing?.hasOwnProperty("uid") &&
-            currentUserSharing.videoTrack
-              ? "grid-sharing"
-              : "grid-normal"
-          }
-        >
-          {start && tracks && (
-            <Video
-              tracks={tracks}
-              users={users}
-              muteOther={muteOther}
-              count={count}
-              uuid={uuid}
-              currentUserSharing={currentUserSharing}
-            />
-          )}
-        </Grid>
+        <div style={{ background: "cadetblue", height: "95%" }}>
+          <div className="channel-name">
+            Nam Seoul university - {channelName}
+          </div>
+
+          <Grid
+            item
+            className={
+              currentUserSharing?.hasOwnProperty("uid") &&
+              currentUserSharing.videoTrack
+                ? "grid-sharing"
+                : "grid-normal"
+            }
+            style={{ height: uuid == "host" ? "90%" : "95%" }}
+          >
+            {start && tracks && (
+              <Video
+                tracks={tracks}
+                users={users}
+                muteOther={muteOther}
+                count={count}
+                uuid={uuid}
+                currentUserSharing={currentUserSharing}
+                channelName={channelName}
+              />
+            )}
+          </Grid>
+          {uuid == "host" ? (
+            <div className="channel-option">
+              <Button type="primary" onClick={() => showQuestion("quiz")}>
+                Send Quiz
+              </Button>
+              <Button type="primary" onClick={() => showQuestion("question")}>
+                Send Question
+              </Button>
+              <Button type="primary">Send Classwork</Button>
+              <Button type="primary">Send Material</Button>
+              <Button
+                type="primary"
+                className="class-end"
+                onClick={leaveChannel}
+              >
+                End Class
+              </Button>
+            </div>
+          ) : null}
+        </div>
       </Grid>
       {isModalVisible ? (
         <Survey
@@ -223,6 +296,30 @@ export default function VideoCall(props) {
           handleCancel={handleCancel}
         />
       ) : null}
+      <Modal
+        title="Your result"
+        visible={isModalQuestion}
+        onOk={handleQuestionOk}
+        onCancel={handleQuestionCancel}
+        footer={[
+          <Button
+            variant="outlined"
+            onClick={handleQuestionCancel}
+            style={{ marginRight: "10px" }}
+          >
+            Cancel
+          </Button>,
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleQuestionOk}
+          >
+            Start
+          </Button>,
+        ]}
+      >
+        <p>Some result...</p>
+      </Modal>
     </>
   );
 }

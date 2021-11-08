@@ -165,7 +165,8 @@ function App() {
                           style={{
                             textAlign: "left",
                             paddingLeft: "10px",
-                            marginTop: "8px",
+                            position: "absolute",
+                            bottom: "5px",
                           }}
                         >
                           <Button
@@ -175,28 +176,27 @@ function App() {
                             {uuid == "host" ? "Start" : "Join"}
                           </Button>
                           {uuid == "host" ? (
-                            <>
-                              <Button
-                                type="primary"
-                                style={{
-                                  margin: "0 10px",
-                                  backgroundColor: "#fd9144",
-                                  border: "none",
-                                }}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                type="primary"
-                                style={{
-                                  backgroundColor: "#657798",
-                                  border: "none",
-                                }}
-                              >
-                                Share
-                              </Button>
-                            </>
+                            <Button
+                              type="primary"
+                              style={{
+                                marginLeft: "10px",
+                                backgroundColor: "#fd9144",
+                                border: "none",
+                              }}
+                            >
+                              Edit
+                            </Button>
                           ) : null}
+                          <Button
+                            type="primary"
+                            style={{
+                              marginLeft: "10px",
+                              backgroundColor: "#657798",
+                              border: "none",
+                            }}
+                          >
+                            Share
+                          </Button>
                         </div>
                       </Col>
                     </Row>
@@ -216,7 +216,8 @@ function App() {
                           style={{
                             textAlign: "left",
                             paddingLeft: "10px",
-                            marginTop: "8px",
+                            position: "absolute",
+                            bottom: "5px",
                           }}
                         >
                           <Button
@@ -228,28 +229,27 @@ function App() {
                             {uuid == "host" ? "Start" : "Join"}
                           </Button>
                           {uuid == "host" ? (
-                            <>
-                              <Button
-                                type="primary"
-                                style={{
-                                  margin: "0 10px",
-                                  backgroundColor: "#fd9144",
-                                  border: "none",
-                                }}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                type="primary"
-                                style={{
-                                  backgroundColor: "#657798",
-                                  border: "none",
-                                }}
-                              >
-                                Share
-                              </Button>{" "}
-                            </>
+                            <Button
+                              type="primary"
+                              style={{
+                                marginLeft: "10px",
+                                backgroundColor: "#fd9144",
+                                border: "none",
+                              }}
+                            >
+                              Edit
+                            </Button>
                           ) : null}
+                          <Button
+                            type="primary"
+                            style={{
+                              marginLeft: "10px",
+                              backgroundColor: "#657798",
+                              border: "none",
+                            }}
+                          >
+                            Share
+                          </Button>
                         </div>
                       </Col>
                     </Row>
@@ -269,7 +269,8 @@ function App() {
                           style={{
                             textAlign: "left",
                             paddingLeft: "10px",
-                            marginTop: "8px",
+                            position: "absolute",
+                            bottom: "5px",
                           }}
                         >
                           <Button
@@ -281,28 +282,27 @@ function App() {
                             {uuid == "host" ? "Start" : "Join"}
                           </Button>
                           {uuid == "host" ? (
-                            <>
-                              <Button
-                                type="primary"
-                                style={{
-                                  margin: "0 10px",
-                                  backgroundColor: "#fd9144",
-                                  border: "none",
-                                }}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                type="primary"
-                                style={{
-                                  backgroundColor: "#657798",
-                                  border: "none",
-                                }}
-                              >
-                                Share
-                              </Button>
-                            </>
+                            <Button
+                              type="primary"
+                              style={{
+                                marginLeft: "10px",
+                                backgroundColor: "#fd9144",
+                                border: "none",
+                              }}
+                            >
+                              Edit
+                            </Button>
                           ) : null}
+                          <Button
+                            type="primary"
+                            style={{
+                              marginLeft: "10px",
+                              backgroundColor: "#657798",
+                              border: "none",
+                            }}
+                          >
+                            Share
+                          </Button>
                         </div>
                       </Col>
                     </Row>
