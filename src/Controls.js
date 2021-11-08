@@ -42,7 +42,7 @@ export default function Controls(props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalStudent, setIsModalStudent] = useState(false);
 
-  const usersRef = doc(db, "users-test", new Date().getTime().toString());
+  const usersRef = doc(db, "users", new Date().getTime().toString());
 
   useEffect(() => {
     console.log("muteOther ", muteOther);
@@ -239,7 +239,7 @@ export default function Controls(props) {
       value: "all", // "one"
     });
 
-    // const docRef = await setDoc(collection(db, "users-test", "sadasd"), {
+    // const docRef = await setDoc(collection(db, "users", "sadasd"), {
     //   name: "test 8",
     //   uid: 9999999999,
     //   status: true,
@@ -308,35 +308,31 @@ export default function Controls(props) {
                 Unmute All
               </Button>
             </Grid>
-
-            <Grid item>
-              <Button variant="contained" color="primary" onClick={showModal}>
-                survey
-              </Button>
-            </Grid>
           </>
-        ) : null}
-        <Grid item>
+        ) : (
+          <Grid item>
+            <Button
+              variant="contained"
+              color="default"
+              onClick={() => leaveChannel()}
+            >
+              Leave
+              <ExitToAppIcon />
+            </Button>
+          </Grid>
+        )}
+        {/* <Grid item>
           <Button variant="contained" color="primary" onClick={showModalResult}>
             Result
           </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="default"
-            onClick={() => leaveChannel()}
-          >
-            Leave
-            <ExitToAppIcon />
-          </Button>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Modal
         title="Add Survey"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        maskClosable={false}
         footer={[
           <Button
             variant="outlined"
@@ -359,6 +355,7 @@ export default function Controls(props) {
         visible={isModalStudent}
         onOk={handleStudentOk}
         onCancel={handleStudentCancel}
+        maskClosable={false}
         footer={[
           <Button variant="contained" color="primary" onClick={handleStudentOk}>
             OK

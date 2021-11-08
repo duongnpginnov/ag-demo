@@ -159,7 +159,7 @@ function App() {
                         </p>
                         <p>Nam Seoul university</p>
                         <p style={{ fontWeight: "bolder" }}>
-                          Monday 9-10 AM, Wednesday 11-12 AM
+                          Monday 8-9 AM, Wednesday 11-12 AM
                         </p>
                         <div
                           style={{

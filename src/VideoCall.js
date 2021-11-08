@@ -21,7 +21,10 @@ import {
   setDoc,
   doc,
 } from "firebase/firestore";
-import { Button, Modal } from "antd";
+import { Button, Modal, Image } from "antd";
+import Quiz from "./image/quiz.PNG";
+import Question from "./image/question.PNG";
+import QuestionResult from "./image/question-result.PNG";
 
 export default function VideoCall(props) {
   const { setInCall, uuid, channelName, token } = props;
@@ -37,7 +40,7 @@ export default function VideoCall(props) {
   const [currentUserSharing, setCurrentUserSharing] = useState({});
   const [isModalQuestion, setIsModalQuestion] = useState(false);
   const [typeQuestion, setTypeQuestion] = useState("");
-  const usersRef = doc(db, "users-test", new Date().getTime().toString());
+  const usersRef = doc(db, "users", new Date().getTime().toString());
 
   useEffect(() => {
     let init = async (name) => {
@@ -115,7 +118,7 @@ export default function VideoCall(props) {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      collection(db, "users-test"),
+      collection(db, "users"),
       async (snapshot) => {
         console.log("test - start listen ", snapshot);
         const userListListen = snapshot.docs.map((doc) => doc.data());
@@ -136,8 +139,13 @@ export default function VideoCall(props) {
           //     setInCall(false);
           //   }
           // } else {
-          if (userAc && userAc.type == "survey" && uuid != "host") {
+          if (userAc && userAc.type == "survey") {
             setIsModalVisible(true);
+            setTimeout(() => {
+              setIsModalVisible(false);
+              setTypeQuestion("result");
+              setIsModalQuestion(true);
+            }, 30000);
           }
           setUserAction(userAc);
           // }
@@ -265,6 +273,7 @@ export default function VideoCall(props) {
                 uuid={uuid}
                 currentUserSharing={currentUserSharing}
                 channelName={channelName}
+                isModalVisible={isModalVisible}
               />
             )}
           </Grid>
@@ -289,37 +298,60 @@ export default function VideoCall(props) {
           ) : null}
         </div>
       </Grid>
-      {isModalVisible ? (
+      {isModalVisible && uuid != "host" ? (
         <Survey
           isModalVisible={isModalVisible}
           handleOk={handleOk}
           handleCancel={handleCancel}
         />
       ) : null}
-      <Modal
-        title="Your result"
-        visible={isModalQuestion}
-        onOk={handleQuestionOk}
-        onCancel={handleQuestionCancel}
-        footer={[
-          <Button
-            variant="outlined"
-            onClick={handleQuestionCancel}
-            style={{ marginRight: "10px" }}
-          >
-            Cancel
-          </Button>,
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleQuestionOk}
-          >
-            Start
-          </Button>,
-        ]}
-      >
-        <p>Some result...</p>
-      </Modal>
+      {isModalQuestion && uuid == "host" ? (
+        <Modal
+          visible={isModalQuestion}
+          maskClosable={false}
+          onOk={handleQuestionOk}
+          onCancel={handleQuestionCancel}
+          footer={
+            typeQuestion != "result"
+              ? [
+                  <Button
+                    variant="outlined"
+                    onClick={handleQuestionCancel}
+                    style={{ marginRight: "10px" }}
+                  >
+                    Cancel
+                  </Button>,
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleQuestionOk}
+                  >
+                    Start
+                  </Button>,
+                ]
+              : [
+                  <Button
+                    variant="outlined"
+                    onClick={handleQuestionCancel}
+                    style={{ marginRight: "10px" }}
+                  >
+                    Close
+                  </Button>,
+                ]
+          }
+        >
+          <Image
+            src={
+              typeQuestion == "quiz"
+                ? Quiz
+                : typeQuestion == "question"
+                ? Question
+                : QuestionResult
+            }
+            preview={false}
+          />
+        </Modal>
+      ) : null}
     </>
   );
 }

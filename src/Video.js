@@ -16,15 +16,23 @@ import {
   setDoc,
 } from "firebase/firestore";
 import db from "./configFireBase";
-import { Modal, Space, List } from "antd";
+import { Modal, Space, List, Radio, Input } from "antd";
 // import { channelName } from "./settings";
+import SurveyAdmin from "./SurveyAdmin";
 
 export default function Video(props) {
-  const { users, tracks, uuid, currentUserSharing, channelName } = props;
+  const {
+    users,
+    tracks,
+    uuid,
+    currentUserSharing,
+    channelName,
+    isModalVisible,
+  } = props;
   const [gridSpacing, setGridSpacing] = useState(12);
   const [showConfirmKick, setShowConfirmKick] = useState(false);
   const [kickName, setKickName] = useState("");
-  const usersRef = doc(db, "users-test", new Date().getTime().toString());
+  const usersRef = doc(db, "users", new Date().getTime().toString());
 
   useEffect(() => {
     setGridSpacing(Math.max(Math.floor(12 / (users.length + 1)), 4));
@@ -157,6 +165,25 @@ export default function Video(props) {
                                 : "100%",
                           }}
                         />
+                        {isModalVisible ? (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "50%",
+                              left: "50%",
+                              fontSize: "30px",
+                              color: "black",
+                              background: "white",
+                              transform: "translate(-50%, -50%)",
+                              width: "80%",
+                              minHeight: "200px",
+                              textAlign: "left",
+                              paddingLeft: "20px",
+                            }}
+                          >
+                            <SurveyAdmin users={users} userIndex={index} />
+                          </div>
+                        ) : null}
                         <div
                           style={{
                             position: "absolute",
@@ -259,6 +286,25 @@ export default function Video(props) {
                             position: "relative",
                           }}
                         >
+                          {isModalVisible ? (
+                            <div
+                              style={{
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                fontSize: "30px",
+                                color: "black",
+                                background: "white",
+                                transform: "translate(-50%, -50%)",
+                                width: "80%",
+                                minHeight: "200px",
+                                textAlign: "left",
+                                paddingLeft: "20px",
+                              }}
+                            >
+                              <SurveyAdmin users={users} userIndex={index} />
+                            </div>
+                          ) : null}
                           <div
                             style={{
                               position: "absolute",
@@ -633,6 +679,7 @@ export default function Video(props) {
         onCancel={handleCancel}
         okText="Confim"
         cancelText="Cancel"
+        maskClosable={false}
       >
         <p>
           Do you want to kick{" "}

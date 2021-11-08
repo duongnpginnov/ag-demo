@@ -8,7 +8,7 @@ export default function Survey(props) {
   const [selectValue, setSelectValue] = useState(1);
 
   useEffect(() => {
-    let timeToEnd = 60;
+    let timeToEnd = 30;
     let timeShowInterview = setInterval(() => {
       timeToEnd -= 1;
       setTimeShowSurvey(timeToEnd);
@@ -17,7 +17,7 @@ export default function Survey(props) {
       console.log("close modal");
       clearInterval(timeShowInterview);
       handleOk();
-    }, 59800);
+    }, 29800);
     return () => {
       clearTimeout(timeshowTimeout);
       clearInterval(timeShowInterview);
@@ -30,20 +30,25 @@ export default function Survey(props) {
 
   return (
     <Modal
-      title="survey"
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}
+      maskClosable={false}
     >
-      <h2>Your survey will be close after {timwShowSurvey} seconds</h2>
-      <p>Answer question</p>
+      <h2 style={{ textAlign: "center" }}>
+        Your survey will be close after {timwShowSurvey} seconds
+      </h2>
+      <p style={{ textAlign: "center" }}>
+        What is number missing from this sequence?
+      </p>
+      <p style={{ textAlign: "center" }}>4 9 16 25 36 ? 64</p>
       <Radio.Group onChange={onChange} value={selectValue}>
         <Space direction="vertical">
-          <Radio value={1}>Option A</Radio>
-          <Radio value={2}>Option B</Radio>
-          <Radio value={3}>Option C</Radio>
+          <Radio value={1}>5</Radio>
+          <Radio value={2}>6</Radio>
+          <Radio value={3}>7</Radio>
           <Radio value={4}>
-            More...
+            Other...
             {selectValue === 4 ? (
               <Input style={{ width: 100, marginLeft: 10 }} />
             ) : null}

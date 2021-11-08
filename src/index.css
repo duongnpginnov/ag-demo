@@ -183,3 +183,11 @@ code {
   width: 190px;
   margin-left: auto;
 }
+
+.custom-video-list .ant-list-split .ant-list-item:last-child {
+  border-bottom: 1px solid #f0f0f0 !important;
+}
+
+span.anticon.anticon-close.ant-modal-close-icon {
+  display: none;
+}
