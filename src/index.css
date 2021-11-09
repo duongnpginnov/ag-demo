@@ -117,7 +117,7 @@ code {
 }
 
 .ant-btn {
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 .channel-item .ant-col-4 {
@@ -190,4 +190,33 @@ code {
 
 span.anticon.anticon-close.ant-modal-close-icon {
   display: none;
+}
+
+.result-admin {
+  background: cadetblue;
+  height: 100%;
+}
+
+.result-admin .result-admin-chart {
+  height: 90%;
+  padding-top: 10%;
+}
+
+.result-admin .ant-btn {
+  border-radius: 10px;
+  background-color: #096dd9;
+  border: none;
+  color: white;
+  font-weight: bold;
+  width: 100px;
+}
+
+.result-admin .result-admin-chart .ant-image {
+  display: flex;
+  height: 50%;
+}
+
+.result-admin .result-admin-chart .result-admin-chart-title {
+  font-size: 20px;
+  color: white;
 }

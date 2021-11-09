@@ -36,6 +36,7 @@ export default function Controls(props) {
     currentUserSharing,
     channelName,
     token,
+    setShowResultAdmin,
   } = props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
   const [shareScreen, setShareScreen] = useState(false);
@@ -78,8 +79,9 @@ export default function Controls(props) {
       client.removeAllListeners();
       tracks[0].close();
       tracks[1].close();
-      setStart(false);
-      setInCall(false);
+      // setStart(false);
+      // setInCall(false);
+      setShowResultAdmin(true);
     };
 
     if (userAction && userAction.hasOwnProperty("timestamp")) {
@@ -215,8 +217,9 @@ export default function Controls(props) {
     client.removeAllListeners();
     tracks[0].close();
     tracks[1].close();
-    setStart(false);
-    setInCall(false);
+    // setStart(false);
+    // setInCall(false);
+    setShowResultAdmin(true);
     if (uuid == "host") {
       const updateTimestamp = await setDoc(usersRef, {
         name: "test 8",

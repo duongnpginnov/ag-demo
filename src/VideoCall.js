@@ -25,6 +25,7 @@ import { Button, Modal, Image } from "antd";
 import Quiz from "./image/quiz.PNG";
 import Question from "./image/question.PNG";
 import QuestionResult from "./image/question-result.PNG";
+import ResultAdmin from "./ResultAdmin";
 
 export default function VideoCall(props) {
   const { setInCall, uuid, channelName, token } = props;
@@ -40,6 +41,7 @@ export default function VideoCall(props) {
   const [currentUserSharing, setCurrentUserSharing] = useState({});
   const [isModalQuestion, setIsModalQuestion] = useState(false);
   const [typeQuestion, setTypeQuestion] = useState("");
+  const [showResultAdmin, setShowResultAdmin] = useState(false);
   const usersRef = doc(db, "users", new Date().getTime().toString());
 
   useEffect(() => {
@@ -206,8 +208,7 @@ export default function VideoCall(props) {
     client.removeAllListeners();
     tracks[0].close();
     tracks[1].close();
-    setStart(false);
-    setInCall(false);
+    setShowResultAdmin(true);
     if (uuid == "host") {
       const updateTimestamp = await setDoc(usersRef, {
         name: "test 8",
@@ -227,131 +228,146 @@ export default function VideoCall(props) {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        style={{ height: "100%", width: "99%" }}
-      >
-        <Grid item style={{ height: "5%" }}>
-          {ready && tracks && (
-            <Controls
-              tracks={tracks}
-              setStart={setStart}
-              setInCall={setInCall}
-              muteOther={muteOther}
-              uuid={uuid}
-              users={users}
-              count={count}
-              userAction={userAction}
-              currentUserSharing={currentUserSharing}
-              channelName={channelName}
-              token={token}
-            />
-          )}
-        </Grid>
-        <div style={{ background: "cadetblue", height: "95%" }}>
-          <div className="channel-name">
-            Nam Seoul university - {channelName}
-          </div>
-
-          <Grid
-            item
-            className={
-              currentUserSharing?.hasOwnProperty("uid") &&
-              currentUserSharing.videoTrack
-                ? "grid-sharing"
-                : "grid-normal"
-            }
-            style={{ height: uuid == "host" ? "90%" : "95%" }}
-          >
-            {start && tracks && (
-              <Video
-                tracks={tracks}
-                users={users}
-                muteOther={muteOther}
-                count={count}
-                uuid={uuid}
-                currentUserSharing={currentUserSharing}
-                channelName={channelName}
-                isModalVisible={isModalVisible}
-              />
-            )}
-          </Grid>
-          {uuid == "host" ? (
-            <div className="channel-option">
-              <Button type="primary" onClick={() => showQuestion("quiz")}>
-                Send Quiz
-              </Button>
-              <Button type="primary" onClick={() => showQuestion("question")}>
-                Send Question
-              </Button>
-              <Button type="primary">Send Classwork</Button>
-              <Button type="primary">Send Material</Button>
-              <Button
-                type="primary"
-                className="class-end"
-                onClick={leaveChannel}
-              >
-                End Class
-              </Button>
-            </div>
-          ) : null}
-        </div>
-      </Grid>
-      {isModalVisible && uuid != "host" ? (
-        <Survey
-          isModalVisible={isModalVisible}
-          handleOk={handleOk}
-          handleCancel={handleCancel}
+      {showResultAdmin ? (
+        <ResultAdmin
+          setStart={setStart}
+          setInCall={setInCall}
+          setShowResultAdmin={setShowResultAdmin}
+          uuid={uuid}
         />
-      ) : null}
-      {isModalQuestion && uuid == "host" ? (
-        <Modal
-          visible={isModalQuestion}
-          maskClosable={false}
-          onOk={handleQuestionOk}
-          onCancel={handleQuestionCancel}
-          footer={
-            typeQuestion != "result"
-              ? [
+      ) : (
+        <>
+          <Grid
+            container
+            direction="column"
+            style={{ height: "100%", width: "99%" }}
+          >
+            <Grid item style={{ height: "5%" }}>
+              {ready && tracks && (
+                <Controls
+                  tracks={tracks}
+                  setStart={setStart}
+                  setInCall={setInCall}
+                  muteOther={muteOther}
+                  uuid={uuid}
+                  users={users}
+                  count={count}
+                  userAction={userAction}
+                  currentUserSharing={currentUserSharing}
+                  channelName={channelName}
+                  token={token}
+                  setShowResultAdmin={setShowResultAdmin}
+                />
+              )}
+            </Grid>
+            <div style={{ background: "cadetblue", height: "95%" }}>
+              <div className="channel-name">
+                Nam Seoul university - {channelName}
+              </div>
+
+              <Grid
+                item
+                className={
+                  currentUserSharing?.hasOwnProperty("uid") &&
+                  currentUserSharing.videoTrack
+                    ? "grid-sharing"
+                    : "grid-normal"
+                }
+                style={{ height: uuid == "host" ? "90%" : "95%" }}
+              >
+                {start && tracks && (
+                  <Video
+                    tracks={tracks}
+                    users={users}
+                    muteOther={muteOther}
+                    count={count}
+                    uuid={uuid}
+                    currentUserSharing={currentUserSharing}
+                    channelName={channelName}
+                    isModalVisible={isModalVisible}
+                  />
+                )}
+              </Grid>
+              {uuid == "host" ? (
+                <div className="channel-option">
+                  <Button type="primary" onClick={() => showQuestion("quiz")}>
+                    Send Quiz
+                  </Button>
                   <Button
-                    variant="outlined"
-                    onClick={handleQuestionCancel}
-                    style={{ marginRight: "10px" }}
+                    type="primary"
+                    onClick={() => showQuestion("question")}
                   >
-                    Cancel
-                  </Button>,
+                    Send Question
+                  </Button>
+                  <Button type="primary">Send Classwork</Button>
+                  <Button type="primary">Send Material</Button>
                   <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleQuestionOk}
+                    type="primary"
+                    className="class-end"
+                    onClick={leaveChannel}
                   >
-                    Start
-                  </Button>,
-                ]
-              : [
-                  <Button
-                    variant="outlined"
-                    onClick={handleQuestionCancel}
-                    style={{ marginRight: "10px" }}
-                  >
-                    Close
-                  </Button>,
-                ]
-          }
-        >
-          <Image
-            src={
-              typeQuestion == "quiz"
-                ? Quiz
-                : typeQuestion == "question"
-                ? Question
-                : QuestionResult
-            }
-            preview={false}
-          />
-        </Modal>
-      ) : null}
+                    End Class
+                  </Button>
+                </div>
+              ) : null}
+            </div>
+          </Grid>
+          {isModalVisible && uuid != "host" ? (
+            <Survey
+              isModalVisible={isModalVisible}
+              handleOk={handleOk}
+              handleCancel={handleCancel}
+            />
+          ) : null}
+          {isModalQuestion && uuid == "host" ? (
+            <Modal
+              visible={isModalQuestion}
+              maskClosable={false}
+              onOk={handleQuestionOk}
+              onCancel={handleQuestionCancel}
+              footer={
+                typeQuestion != "result"
+                  ? [
+                      <Button
+                        variant="outlined"
+                        onClick={handleQuestionCancel}
+                        style={{ marginRight: "10px" }}
+                      >
+                        Cancel
+                      </Button>,
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleQuestionOk}
+                      >
+                        Start
+                      </Button>,
+                    ]
+                  : [
+                      <Button
+                        variant="outlined"
+                        onClick={handleQuestionCancel}
+                        style={{ marginRight: "10px" }}
+                      >
+                        Close
+                      </Button>,
+                    ]
+              }
+            >
+              <Image
+                src={
+                  typeQuestion == "quiz"
+                    ? Quiz
+                    : typeQuestion == "question"
+                    ? Question
+                    : QuestionResult
+                }
+                preview={false}
+              />
+            </Modal>
+          ) : null}
+        </>
+      )}
     </>
   );
 }
