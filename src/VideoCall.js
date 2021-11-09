@@ -141,15 +141,17 @@ export default function VideoCall(props) {
           //     setInCall(false);
           //   }
           // } else {
-          if (userAc && userAc.type == "survey") {
-            setIsModalVisible(true);
-            setTimeout(() => {
-              setIsModalVisible(false);
-              setTypeQuestion("result");
-              setIsModalQuestion(true);
-            }, 30000);
+          if (userAc && userAc.name == channelName) {
+            if (userAc && userAc.type == "survey") {
+              setIsModalVisible(true);
+              setTimeout(() => {
+                setIsModalVisible(false);
+                setTypeQuestion("result");
+                setIsModalQuestion(true);
+              }, 30000);
+            }
+            setUserAction(userAc);
           }
-          setUserAction(userAc);
           // }
         } else {
           //ignore for first time
@@ -273,7 +275,10 @@ export default function VideoCall(props) {
                     ? "grid-sharing"
                     : "grid-normal"
                 }
-                style={{ height: uuid == "host" ? "90%" : "95%" }}
+                style={{
+                  height: uuid == "host" ? "calc(100% - 75px)" : "95%",
+                  overflow: "auto",
+                }}
               >
                 {start && tracks && (
                   <Video
@@ -339,6 +344,7 @@ export default function VideoCall(props) {
                         variant="contained"
                         color="primary"
                         onClick={handleQuestionOk}
+                        style={{ backgroundColor: "#c84713", color: "white" }}
                       >
                         Start
                       </Button>,

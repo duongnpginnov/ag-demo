@@ -123,11 +123,11 @@ export default function Video(props) {
                       currentUserSharing.videoTrack
                         ? "200px"
                         : "100%",
-                    width:
-                      currentUserSharing?.hasOwnProperty("uid") &&
-                      currentUserSharing.videoTrack
-                        ? "200px"
-                        : "100%",
+                    // width:
+                    //   currentUserSharing?.hasOwnProperty("uid") &&
+                    //   currentUserSharing.videoTrack
+                    //     ? "200px"
+                    //     : "100%",
                   }}
                   audioTrack={tracks[0]}
                 />
@@ -144,7 +144,15 @@ export default function Video(props) {
                             ? 24
                             : gridSpacing
                         }
-                        style={{ padding: "10px", position: "relative" }}
+                        style={{
+                          padding: "10px",
+                          position: "relative",
+                          minHeight:
+                            currentUserSharing?.hasOwnProperty("uid") &&
+                            currentUserSharing.videoTrack
+                              ? "auto"
+                              : "300px",
+                        }}
                         key={index}
                         className="video-item"
                       >
@@ -158,11 +166,11 @@ export default function Video(props) {
                               currentUserSharing.videoTrack
                                 ? "200px"
                                 : "100%",
-                            width:
-                              currentUserSharing?.hasOwnProperty("uid") &&
-                              currentUserSharing.videoTrack
-                                ? "200px"
-                                : "100%",
+                            // width:
+                            //   currentUserSharing?.hasOwnProperty("uid") &&
+                            //   currentUserSharing.videoTrack
+                            //     ? "200px"
+                            //     : "100%",
                           }}
                         />
                         {isModalVisible ? (
@@ -266,7 +274,15 @@ export default function Video(props) {
                       <Grid
                         item
                         xs={gridSpacing}
-                        style={{ padding: "10px", position: "relative" }}
+                        style={{
+                          padding: "10px",
+                          position: "relative",
+                          minHeight:
+                            currentUserSharing?.hasOwnProperty("uid") &&
+                            currentUserSharing.videoTrack
+                              ? "auto"
+                              : "300px",
+                        }}
                         key={index}
                         className="video-item"
                       >
@@ -436,11 +452,11 @@ export default function Video(props) {
                     currentUserSharing.videoTrack
                       ? "200px"
                       : "100%",
-                  width:
-                    currentUserSharing?.hasOwnProperty("uid") &&
-                    currentUserSharing.videoTrack
-                      ? "200px"
-                      : "100%",
+                  // width:
+                  //   currentUserSharing?.hasOwnProperty("uid") &&
+                  //   currentUserSharing.videoTrack
+                  //     ? "200px"
+                  //     : "100%",
                 }}
                 audioTrack={tracks[0]}
               />
@@ -457,7 +473,15 @@ export default function Video(props) {
                           ? 24
                           : gridSpacing
                       }
-                      style={{ padding: "10px", position: "relative" }}
+                      style={{
+                        padding: "10px",
+                        position: "relative",
+                        minHeight:
+                          currentUserSharing?.hasOwnProperty("uid") &&
+                          currentUserSharing.videoTrack
+                            ? "auto"
+                            : "300px",
+                      }}
                       key={index}
                     >
                       <AgoraVideoPlayer
@@ -470,11 +494,11 @@ export default function Video(props) {
                             currentUserSharing.videoTrack
                               ? "200px"
                               : "100%",
-                          width:
-                            currentUserSharing?.hasOwnProperty("uid") &&
-                            currentUserSharing.videoTrack
-                              ? "200px"
-                              : "100%",
+                          // width:
+                          //   currentUserSharing?.hasOwnProperty("uid") &&
+                          //   currentUserSharing.videoTrack
+                          //     ? "200px"
+                          //     : "100%",
                         }}
                       />
                       <div
@@ -505,6 +529,11 @@ export default function Video(props) {
                               user.audioTrack ? true : false
                             )
                           }
+                          style={{
+                            height: "35px",
+                            width: "40px",
+                            minWidth: "40px",
+                          }}
                         >
                           {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
                         </Button>
@@ -513,7 +542,7 @@ export default function Video(props) {
                         style={{
                           position: "absolute",
                           bottom: "10px",
-                          right: "80px",
+                          right: "60px",
                         }}
                       >
                         <Button
@@ -527,6 +556,11 @@ export default function Video(props) {
                               user.videoTrack ? true : false
                             )
                           }
+                          style={{
+                            height: "35px",
+                            width: "40px",
+                            minWidth: "40px",
+                          }}
                         >
                           {user.videoTrack ? (
                             <VideocamIcon />
@@ -540,13 +574,18 @@ export default function Video(props) {
                           style={{
                             position: "absolute",
                             bottom: "10px",
-                            right: "150px",
+                            right: "110px",
                           }}
                         >
                           <Button
                             variant="contained"
                             color="primary"
                             onClick={() => hostKickPaticipant(user.uid)}
+                            style={{
+                              height: "35px",
+                              width: "40px",
+                              minWidth: "40px",
+                            }}
                           >
                             <ExitToAppIcon />
                           </Button>
@@ -559,7 +598,15 @@ export default function Video(props) {
                     <Grid
                       item
                       xs={gridSpacing}
-                      style={{ padding: "10px", position: "relative" }}
+                      style={{
+                        padding: "10px",
+                        position: "relative",
+                        minHeight:
+                          currentUserSharing?.hasOwnProperty("uid") &&
+                          currentUserSharing.videoTrack
+                            ? "auto"
+                            : "300px",
+                      }}
                       key={index}
                     >
                       <div
@@ -607,6 +654,11 @@ export default function Video(props) {
                                 user.audioTrack ? true : false
                               )
                             }
+                            style={{
+                              height: "35px",
+                              width: "40px",
+                              minWidth: "40px",
+                            }}
                           >
                             {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
                           </Button>
@@ -615,7 +667,7 @@ export default function Video(props) {
                           style={{
                             position: "absolute",
                             bottom: "0",
-                            right: "70px",
+                            right: "50px",
                           }}
                         >
                           <Button
@@ -629,6 +681,11 @@ export default function Video(props) {
                                 user.videoTrack ? true : false
                               )
                             }
+                            style={{
+                              height: "35px",
+                              width: "40px",
+                              minWidth: "40px",
+                            }}
                           >
                             {user.videoTrack ? (
                               <VideocamIcon />
@@ -642,13 +699,18 @@ export default function Video(props) {
                             style={{
                               position: "absolute",
                               bottom: "0",
-                              right: "140px",
+                              right: "100px",
                             }}
                           >
                             <Button
                               variant="contained"
                               color="primary"
                               onClick={() => hostKickPaticipant(user.uid)}
+                              style={{
+                                height: "35px",
+                                width: "40px",
+                                minWidth: "40px",
+                              }}
                             >
                               <ExitToAppIcon />
                             </Button>
