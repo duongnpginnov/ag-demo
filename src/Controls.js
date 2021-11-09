@@ -10,7 +10,7 @@ import ScreenShareIcon from "@material-ui/icons/ScreenShare";
 import { config, appId } from "./settings.js";
 
 import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
-import { Modal } from "antd";
+import { Modal, Avatar, Image } from "antd";
 import {
   getFirestore,
   collection,
@@ -22,6 +22,7 @@ import {
   doc,
 } from "firebase/firestore";
 import db from "./configFireBase";
+import Logo from "./image/logo.svg";
 
 export default function Controls(props) {
   const client = useClient();
@@ -186,7 +187,7 @@ export default function Controls(props) {
 
   const handleOk = async () => {
     const updateTimestamp = await setDoc(usersRef, {
-      name: "test 8",
+      name: channelName,
       uid: 9999999999,
       status: true,
       type: "survey", // "cam", "survey",
@@ -222,7 +223,7 @@ export default function Controls(props) {
     setShowResultAdmin(true);
     if (uuid == "host") {
       const updateTimestamp = await setDoc(usersRef, {
-        name: "test 8",
+        name: channelName,
         uid: 9999999999,
         status: false,
         type: "kick", // "cam", "survey",
@@ -234,7 +235,7 @@ export default function Controls(props) {
 
   const turnOnMic = async () => {
     const updateTimestamp = await setDoc(usersRef, {
-      name: "test 8",
+      name: channelName,
       uid: 9999999999,
       status: true,
       type: "mic", // "cam", "survey",
@@ -254,7 +255,7 @@ export default function Controls(props) {
 
   const turnOffMic = async () => {
     const updateTimestamp = await setDoc(usersRef, {
-      name: "test 8",
+      name: channelName,
       uid: 9999999999,
       status: false,
       type: "mic", // "cam", "survey",
@@ -329,6 +330,9 @@ export default function Controls(props) {
             Result
           </Button>
         </Grid> */}
+        <Grid item className="control-logo">
+          <Image src={Logo} preview={false} />
+        </Grid>
       </Grid>
       <Modal
         title="Add Survey"

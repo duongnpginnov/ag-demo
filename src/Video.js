@@ -44,7 +44,7 @@ export default function Video(props) {
     console.log("test - hostToggleMicOfPaticipant status ", status);
     if (uuid == "host") {
       const updateTimestamp = await setDoc(usersRef, {
-        name: "test 8",
+        name: channelName,
         uid: uid,
         status: status ? false : true,
         type: "mic", // "cam", "survey",
@@ -57,7 +57,7 @@ export default function Video(props) {
   const hostToggleCamOfPaticipant = async (uid, status) => {
     if (uuid == "host") {
       const updateTimestamp = await setDoc(usersRef, {
-        name: "test 8",
+        name: channelName,
         uid: uid,
         status: status ? false : true,
         type: "cam", // "cam", "survey",
@@ -79,7 +79,7 @@ export default function Video(props) {
   const handleOk = async () => {
     setShowConfirmKick(false);
     const updateTimestamp = await setDoc(usersRef, {
-      name: "test 8",
+      name: channelName,
       uid: kickName,
       status: true,
       type: "kick", // "cam", "survey",

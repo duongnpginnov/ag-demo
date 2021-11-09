@@ -185,7 +185,7 @@ export default function VideoCall(props) {
 
   const handleQuestionOk = async () => {
     const updateTimestamp = await setDoc(usersRef, {
-      name: "test 8",
+      name: channelName,
       uid: 9999999999,
       status: true,
       type: "survey", // "cam", "survey",
@@ -211,7 +211,7 @@ export default function VideoCall(props) {
     setShowResultAdmin(true);
     if (uuid == "host") {
       const updateTimestamp = await setDoc(usersRef, {
-        name: "test 8",
+        name: channelName,
         uid: 9999999999,
         status: false,
         type: "kick", // "cam", "survey",

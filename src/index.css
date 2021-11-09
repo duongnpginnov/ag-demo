@@ -220,3 +220,13 @@ span.anticon.anticon-close.ant-modal-close-icon {
   font-size: 20px;
   color: white;
 }
+
+.control-logo {
+  position: absolute;
+  right: 10px;
+  top: 0;
+}
+
+.control-logo .ant-image-img {
+  height: 25px;
+}
