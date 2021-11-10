@@ -51,6 +51,7 @@ export default function VideoCall(props) {
         console.log("test - user-published ", user);
         if (mediaType === "audio") {
           user.audioTrack.play();
+          user.mic = true;
         }
 
         setCount((prevCount) => {
@@ -62,6 +63,7 @@ export default function VideoCall(props) {
         console.log("test - user-unpublished ", user);
         if (mediaType === "audio") {
           if (user.audioTrack) user.audioTrack.stop();
+          user.mic = false;
         }
         setCount((prevCount) => {
           return prevCount + 1;
@@ -83,6 +85,7 @@ export default function VideoCall(props) {
           setCurrentUserSharing(user);
         } else {
           setUsers((prevUsers) => {
+            user.mic = true;
             return [...prevUsers, user];
           });
         }
@@ -201,8 +204,23 @@ export default function VideoCall(props) {
     setIsModalQuestion(false);
   };
 
-  const updateFirebaseState = (data) => {
-    console.log("test - updateFirebaseState ", data);
+  const updateUserMic = (type, uid, value) => {
+    let tmpUsers = [...users];
+    tmpUsers.length &&
+      tmpUsers.map((user) => {
+        if (type == "all") {
+          if (value) {
+            user.mic = true;
+          } else {
+            user.mic = false;
+          }
+        } else {
+          if (user.uid == uid) {
+            user.mic = value;
+          }
+        }
+      });
+    setUsers(tmpUsers);
   };
 
   const leaveChannel = async () => {
@@ -259,6 +277,7 @@ export default function VideoCall(props) {
                   channelName={channelName}
                   token={token}
                   setShowResultAdmin={setShowResultAdmin}
+                  updateUserMic={updateUserMic}
                 />
               )}
             </Grid>
@@ -290,6 +309,7 @@ export default function VideoCall(props) {
                     currentUserSharing={currentUserSharing}
                     channelName={channelName}
                     isModalVisible={isModalVisible}
+                    updateUserMic={updateUserMic}
                   />
                 )}
               </Grid>

@@ -38,6 +38,7 @@ export default function Controls(props) {
     channelName,
     token,
     setShowResultAdmin,
+    updateUserMic,
   } = props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
   const [shareScreen, setShareScreen] = useState(false);
@@ -234,6 +235,7 @@ export default function Controls(props) {
   };
 
   const turnOnMic = async () => {
+    updateUserMic("all", uuid, true);
     const updateTimestamp = await setDoc(usersRef, {
       name: channelName,
       uid: 9999999999,
@@ -254,6 +256,7 @@ export default function Controls(props) {
   };
 
   const turnOffMic = async () => {
+    updateUserMic("all", uuid, false);
     const updateTimestamp = await setDoc(usersRef, {
       name: channelName,
       uid: 9999999999,

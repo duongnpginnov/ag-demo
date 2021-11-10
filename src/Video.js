@@ -28,6 +28,7 @@ export default function Video(props) {
     currentUserSharing,
     channelName,
     isModalVisible,
+    updateUserMic,
   } = props;
   const [gridSpacing, setGridSpacing] = useState(12);
   const [showConfirmKick, setShowConfirmKick] = useState(false);
@@ -42,6 +43,7 @@ export default function Video(props) {
   const hostToggleMicOfPaticipant = async (uid, status) => {
     console.log("test - hostToggleMicOfPaticipant uid ", uid);
     console.log("test - hostToggleMicOfPaticipant status ", status);
+    updateUserMic("one", uid, status ? false : true);
     if (uuid == "host") {
       const updateTimestamp = await setDoc(usersRef, {
         name: channelName,
@@ -212,16 +214,16 @@ export default function Video(props) {
                         >
                           <Button
                             variant="contained"
-                            color={user.audioTrack ? "primary" : "secondary"}
+                            color={user.mic ? "primary" : "secondary"}
                             disabled={uuid != "host"}
                             onClick={() =>
                               hostToggleMicOfPaticipant(
                                 user.uid,
-                                user.audioTrack ? true : false
+                                user.mic ? true : false
                               )
                             }
                           >
-                            {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
+                            {user.mic ? <MicIcon /> : <MicOffIcon />}
                           </Button>
                         </div>
                         <div
@@ -341,17 +343,17 @@ export default function Video(props) {
                           >
                             <Button
                               variant="contained"
-                              color={user.audioTrack ? "primary" : "secondary"}
+                              color={user.mic ? "primary" : "secondary"}
                               // onClick={() => mute("video")}
                               disabled={uuid != "host"}
                               onClick={() =>
                                 hostToggleMicOfPaticipant(
                                   user.uid,
-                                  user.audioTrack ? true : false
+                                  user.mic ? true : false
                                 )
                               }
                             >
-                              {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
+                              {user.mic ? <MicIcon /> : <MicOffIcon />}
                             </Button>
                           </div>
                           <div
@@ -521,12 +523,12 @@ export default function Video(props) {
                       >
                         <Button
                           variant="contained"
-                          color={user.audioTrack ? "primary" : "secondary"}
+                          color={user.mic ? "primary" : "secondary"}
                           disabled={uuid != "host"}
                           onClick={() =>
                             hostToggleMicOfPaticipant(
                               user.uid,
-                              user.audioTrack ? true : false
+                              user.mic ? true : false
                             )
                           }
                           style={{
@@ -535,7 +537,7 @@ export default function Video(props) {
                             minWidth: "40px",
                           }}
                         >
-                          {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
+                          {user.mic ? <MicIcon /> : <MicOffIcon />}
                         </Button>
                       </div>
                       <div
@@ -645,13 +647,13 @@ export default function Video(props) {
                         >
                           <Button
                             variant="contained"
-                            color={user.audioTrack ? "primary" : "secondary"}
+                            color={user.mic ? "primary" : "secondary"}
                             // onClick={() => mute("video")}
                             disabled={uuid != "host"}
                             onClick={() =>
                               hostToggleMicOfPaticipant(
                                 user.uid,
-                                user.audioTrack ? true : false
+                                user.mic ? true : false
                               )
                             }
                             style={{
@@ -660,7 +662,7 @@ export default function Video(props) {
                               minWidth: "40px",
                             }}
                           >
-                            {user.audioTrack ? <MicIcon /> : <MicOffIcon />}
+                            {user.mic ? <MicIcon /> : <MicOffIcon />}
                           </Button>
                         </div>
                         <div

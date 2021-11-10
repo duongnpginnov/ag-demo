@@ -171,7 +171,7 @@ function App() {
                         >
                           <Button
                             type="primary"
-                            onClick={() => handleStart("Digital Marketing")}
+                            onClick={() => handleStart("Digital Marketing123")}
                           >
                             {uuid == "host" ? "Start" : "Join"}
                           </Button>
