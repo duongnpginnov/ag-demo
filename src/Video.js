@@ -216,7 +216,7 @@ export default function Video(props) {
                           <Button
                             variant="contained"
                             color={user.mic ? "primary" : "secondary"}
-                            disabled={uuid != "host"}
+                            disabled={userType !== "university"}
                             onClick={() =>
                               hostToggleMicOfPaticipant(
                                 user.uid,
@@ -238,7 +238,7 @@ export default function Video(props) {
                             variant="contained"
                             color={user.videoTrack ? "primary" : "secondary"}
                             // onClick={() => mute("video")}
-                            disabled={uuid != "host"}
+                            disabled={userType !== "university"}
                             onClick={() =>
                               hostToggleCamOfPaticipant(
                                 user.uid,
@@ -253,7 +253,7 @@ export default function Video(props) {
                             )}
                           </Button>
                         </div>
-                        {uuid != "host" ? null : (
+                        {userType !== "university" ? null : (
                           <div
                             style={{
                               position: "absolute",
@@ -346,7 +346,7 @@ export default function Video(props) {
                               variant="contained"
                               color={user.mic ? "primary" : "secondary"}
                               // onClick={() => mute("video")}
-                              disabled={uuid != "host"}
+                              disabled={userType !== "university"}
                               onClick={() =>
                                 hostToggleMicOfPaticipant(
                                   user.uid,
@@ -368,7 +368,7 @@ export default function Video(props) {
                               variant="contained"
                               color={user.videoTrack ? "primary" : "secondary"}
                               // onClick={() => mute("video")}
-                              disabled={uuid != "host"}
+                              disabled={userType !== "university"}
                               onClick={() =>
                                 hostToggleCamOfPaticipant(
                                   user.uid,
@@ -383,7 +383,7 @@ export default function Video(props) {
                               )}
                             </Button>
                           </div>
-                          {uuid != "host" ? null : (
+                          {userType !== "university" ? null : (
                             <div
                               style={{
                                 position: "absolute",
@@ -525,7 +525,7 @@ export default function Video(props) {
                         <Button
                           variant="contained"
                           color={user.mic ? "primary" : "secondary"}
-                          disabled={uuid != "host"}
+                          disabled={userType !== "university"}
                           onClick={() =>
                             hostToggleMicOfPaticipant(
                               user.uid,
@@ -552,7 +552,7 @@ export default function Video(props) {
                           variant="contained"
                           color={user.videoTrack ? "primary" : "secondary"}
                           // onClick={() => mute("video")}
-                          disabled={uuid != "host"}
+                          disabled={userType !== "university"}
                           onClick={() =>
                             hostToggleCamOfPaticipant(
                               user.uid,
@@ -572,7 +572,7 @@ export default function Video(props) {
                           )}
                         </Button>
                       </div>
-                      {uuid != "host" ? null : (
+                      {userType !== "university" ? null : (
                         <div
                           style={{
                             position: "absolute",
@@ -650,7 +650,7 @@ export default function Video(props) {
                             variant="contained"
                             color={user.mic ? "primary" : "secondary"}
                             // onClick={() => mute("video")}
-                            disabled={uuid != "host"}
+                            disabled={userType !== "university"}
                             onClick={() =>
                               hostToggleMicOfPaticipant(
                                 user.uid,
@@ -677,7 +677,7 @@ export default function Video(props) {
                             variant="contained"
                             color={user.videoTrack ? "primary" : "secondary"}
                             // onClick={() => mute("video")}
-                            disabled={uuid != "host"}
+                            disabled={userType !== "university"}
                             onClick={() =>
                               hostToggleCamOfPaticipant(
                                 user.uid,
@@ -697,7 +697,7 @@ export default function Video(props) {
                             )}
                           </Button>
                         </div>
-                        {uuid != "host" ? null : (
+                        {userType !== "university" ? null : (
                           <div
                             style={{
                               position: "absolute",

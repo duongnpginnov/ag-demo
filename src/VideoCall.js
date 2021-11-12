@@ -343,7 +343,7 @@ export default function VideoCall(props) {
               ) : null}
             </div>
           </Grid>
-          {isModalVisible && uuid != "host" ? (
+          {isModalVisible && userType !== "university" ? (
             <Survey
               isModalVisible={isModalVisible}
               handleOk={handleOk}

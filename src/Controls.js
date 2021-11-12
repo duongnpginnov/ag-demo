@@ -89,7 +89,7 @@ export default function Controls(props) {
 
     if (userAction && userAction.hasOwnProperty("timestamp")) {
       if (userAction.type == "mic") {
-        if (userAction.value == "all" && uuid != "host") {
+        if (userAction.value == "all" && userType !== "university") {
           handleChange("mic", userAction.status);
         } else if (userAction.value == "one") {
           if (userAction.uid == uuid) {
@@ -97,7 +97,7 @@ export default function Controls(props) {
           }
         }
       } else if (userAction.type == "cam") {
-        if (userAction.value == "all" && uuid != "host") {
+        if (userAction.value == "all" && userType !== "university") {
           // coming soon
         } else if (userAction.value == "one") {
           if (userAction.uid == uuid) {
