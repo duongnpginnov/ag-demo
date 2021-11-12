@@ -8,13 +8,12 @@ import {
 } from "firebase/firestore";
 
 let config = {
-  apiKey: "AIzaSyDir-JGOJvHS6fsoUhqXw94HnIx7rVBSiQ",
-  authDomain: "cloud-education-cb112.firebaseapp.com",
-  projectId: "cloud-education-cb112",
-  storageBucket: "cloud-education-cb112.appspot.com",
-  messagingSenderId: "1771704143",
-  appId: "1:1771704143:web:e7fbf8947f558a53c37f3a",
-  measurementId: "G-WWEHYRNHPT",
+  apiKey: "AIzaSyBEEVA2j4Ti87SwU3TcFijedmwJX8o4SvM",
+  authDomain: "add-plus-40c6a.firebaseapp.com",
+  projectId: "add-plus-40c6a",
+  storageBucket: "add-plus-40c6a.appspot.com",
+  messagingSenderId: "798562669408",
+  appId: "1:798562669408:web:ca5917035336975eb8c405",
 };
 const app = initializeApp(config);
 const db = getFirestore(app);

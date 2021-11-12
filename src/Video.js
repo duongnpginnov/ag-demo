@@ -29,6 +29,7 @@ export default function Video(props) {
     channelName,
     isModalVisible,
     updateUserMic,
+    userType,
   } = props;
   const [gridSpacing, setGridSpacing] = useState(12);
   const [showConfirmKick, setShowConfirmKick] = useState(false);
@@ -44,7 +45,7 @@ export default function Video(props) {
     console.log("test - hostToggleMicOfPaticipant uid ", uid);
     console.log("test - hostToggleMicOfPaticipant status ", status);
     updateUserMic("one", uid, status ? false : true);
-    if (uuid == "host") {
+    if (userType == "university") {
       const updateTimestamp = await setDoc(usersRef, {
         name: channelName,
         uid: uid,
@@ -57,7 +58,7 @@ export default function Video(props) {
   };
 
   const hostToggleCamOfPaticipant = async (uid, status) => {
-    if (uuid == "host") {
+    if (userType == "university") {
       const updateTimestamp = await setDoc(usersRef, {
         name: channelName,
         uid: uid,
@@ -93,7 +94,7 @@ export default function Video(props) {
 
   return (
     <>
-      {uuid == "host" &&
+      {userType == "university" &&
       users.length &&
       !currentUserSharing?.hasOwnProperty("uid") ? (
         <div className="custom-video">

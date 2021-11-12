@@ -39,6 +39,7 @@ export default function Controls(props) {
     token,
     setShowResultAdmin,
     updateUserMic,
+    userType,
   } = props;
   const [trackState, setTrackState] = useState({ video: true, audio: true });
   const [shareScreen, setShareScreen] = useState(false);
@@ -222,7 +223,7 @@ export default function Controls(props) {
     // setStart(false);
     // setInCall(false);
     setShowResultAdmin(true);
-    if (uuid == "host") {
+    if (userType == "university") {
       const updateTimestamp = await setDoc(usersRef, {
         name: channelName,
         uid: 9999999999,
@@ -303,7 +304,7 @@ export default function Controls(props) {
             <ScreenShareIcon />
           </Button>
         </Grid>
-        {uuid == "host" ? (
+        {userType == "university" ? (
           <>
             <Grid item>
               <Button variant="contained" color="primary" onClick={turnOffMic}>

@@ -6,7 +6,14 @@ import AttendanceResult from "./image/attended-result.PNG";
 import StudentResult from "./image/student-result.png";
 
 export default function ResultAdmin(props) {
-  const { setInCall, setStart, setShowResultAdmin, uuid } = props;
+  const {
+    setInCall,
+    setStart,
+    setShowResultAdmin,
+    uuid,
+    userType,
+    setEndMeeting,
+  } = props;
 
   useEffect(() => {}, []);
 
@@ -14,12 +21,13 @@ export default function ResultAdmin(props) {
     setStart(false);
     setInCall(false);
     setShowResultAdmin(false);
+    setEndMeeting(true);
   };
 
   return (
     <div className="result-admin">
       <Row justify="space-around" className="result-admin-chart">
-        {uuid == "host" ? (
+        {userType == "university" ? (
           <>
             <Col span={10}>
               <Image src={AttendanceResult} preview={false} />

@@ -28,7 +28,8 @@ import QuestionResult from "./image/question-result.PNG";
 import ResultAdmin from "./ResultAdmin";
 
 export default function VideoCall(props) {
-  const { setInCall, uuid, channelName, token } = props;
+  const { setInCall, uuid, channelName, token, userType, setEndMeeting } =
+    props;
   const [users, setUsers] = useState([]);
   const [start, setStart] = useState(false);
   const client = useClient();
@@ -229,7 +230,7 @@ export default function VideoCall(props) {
     tracks[0].close();
     tracks[1].close();
     setShowResultAdmin(true);
-    if (uuid == "host") {
+    if (userType == "university") {
       const updateTimestamp = await setDoc(usersRef, {
         name: channelName,
         uid: 9999999999,
@@ -254,6 +255,8 @@ export default function VideoCall(props) {
           setInCall={setInCall}
           setShowResultAdmin={setShowResultAdmin}
           uuid={uuid}
+          userType={userType}
+          setEndMeeting={setEndMeeting}
         />
       ) : (
         <>
@@ -278,6 +281,7 @@ export default function VideoCall(props) {
                   token={token}
                   setShowResultAdmin={setShowResultAdmin}
                   updateUserMic={updateUserMic}
+                  userType={userType}
                 />
               )}
             </Grid>
@@ -295,7 +299,8 @@ export default function VideoCall(props) {
                     : "grid-normal"
                 }
                 style={{
-                  height: uuid == "host" ? "calc(100% - 75px)" : "95%",
+                  height:
+                    userType == "university" ? "calc(100% - 75px)" : "95%",
                   overflow: "auto",
                 }}
               >
@@ -310,10 +315,11 @@ export default function VideoCall(props) {
                     channelName={channelName}
                     isModalVisible={isModalVisible}
                     updateUserMic={updateUserMic}
+                    userType={userType}
                   />
                 )}
               </Grid>
-              {uuid == "host" ? (
+              {userType == "university" ? (
                 <div className="channel-option">
                   <Button type="primary" onClick={() => showQuestion("quiz")}>
                     Send Quiz
@@ -344,7 +350,7 @@ export default function VideoCall(props) {
               handleCancel={handleCancel}
             />
           ) : null}
-          {isModalQuestion && uuid == "host" ? (
+          {isModalQuestion && userType == "university" ? (
             <Modal
               visible={isModalQuestion}
               maskClosable={false}
